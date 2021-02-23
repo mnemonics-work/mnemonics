@@ -1,0 +1,18 @@
+.card-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    height: 100%;
+}
+
+.pagination {
+    text-align: center;
+}
