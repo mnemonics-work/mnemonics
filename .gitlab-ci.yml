@@ -1,7 +1,7 @@
-image: node-latest
+image: node:latest
 
 before_script:
-  - apt-get upate -qy
+  - apt-get update -qy
   - apt-get install -y ruby-dev
   - gem install dpl
 
@@ -12,6 +12,7 @@ staging:
   stage: deploy
   image: ruby:latest
   script:
+    - cd frontend
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
   only:
     - stage # Will run only on the staging branch
