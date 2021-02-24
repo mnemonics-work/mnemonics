@@ -5,9 +5,7 @@ require('dotenv').config( {
     path: path.join(__dirname, '.env')
 } );
 
-module.exports = {
-    mode: 'development',
-    watch: true,
+const config = {
     entry: {
         app: path.join(__dirname, 'src', 'index.tsx')
     },
@@ -23,8 +21,8 @@ module.exports = {
         rules: [
             {test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"]},
             {test: /\.css$/, use: ["style-loader", "css-loader"]},
-            {test: /\.tsx?$/, loader: "babel-loader"},
-            {test: /\.tsx?$/, loader: "ts-loader"},
+            {test: /\.tsx?$/, exclude: /node_modules/, loader: "babel-loader"},
+            {test: /\.tsx?$/, exclude: /node_modules/, loader: "ts-loader"},
             {enforce: "pre", test: /\.js$/, loader: "source-map-loader"}
         ],
     },
@@ -34,7 +32,8 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env': {
-                'MNEMONICS_BASE_URL': JSON.stringify(process.env.MNEMONICS_BASE_URL)
+                'MNEMONICS_BASE_URL': JSON.stringify(process.env.MNEMONICS_BASE_URL),
+                'PORT': JSON.stringify(process.env.PORT),
             }
         })
     ],
@@ -42,4 +41,11 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build')
     },
+}
+
+module.exports = (env, argv) => {
+    if(argv.mode === 'production'){
+        config.devtool = false;
+    }
+    return config;
 }
