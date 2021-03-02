@@ -29,7 +29,7 @@ deploy_to_s3_stage:
     name: amazon/aws-cli
     entrypoint: [""]
   script:
-    - ls
+    - ls ./frontend
     - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3 
   only:
     - stage
