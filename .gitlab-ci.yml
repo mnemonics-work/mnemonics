@@ -19,6 +19,7 @@ build_frontend:
   artifacts:
     paths:
       - ./frontend/build
+    expire_in: 10 minutes
   only:
     - stage
 
@@ -29,6 +30,6 @@ deploy_to_s3_stage:
     entrypoint: [""]
   script:
     - ls
-    - aws s3 sync --delete .frontend/build s3://$AWS_STAGING_S3 
+    - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3 
   only:
     - stage
