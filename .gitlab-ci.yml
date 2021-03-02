@@ -12,6 +12,10 @@ variables:
 build_frontend:
   stage: build
   image: node:latest
+
+  cache:
+    paths:
+      - ./frontend/node_modules
   script:
     - cd frontend
     - yarn install
@@ -29,7 +33,6 @@ deploy_to_s3_stage:
     name: amazon/aws-cli
     entrypoint: [""]
   script:
-    - ls ./frontend
     - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3 
   only:
     - stage
