@@ -18,7 +18,7 @@ build_frontend:
     - yarn run build
   artifacts:
     paths:
-      - ./build
+      - ./frontend/build
   only:
     - stage
 
@@ -28,6 +28,7 @@ deploy_to_s3_stage:
     name: amazon/aws-cli
     entrypoint: [""]
   script:
-    - aws s3 sync --delete ./build s3://$AWS_STAGING_S3 
+    - ls
+    - aws s3 sync --delete .frontend/build s3://$AWS_STAGING_S3 
   only:
     - stage
