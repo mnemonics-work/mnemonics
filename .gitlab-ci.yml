@@ -1,18 +1,33 @@
 image: node:latest
 
-before_script:
-  - apt-get update -qy
-  - apt-get install -y ruby-dev
-  - gem install dpl
-
 stages:
+  - build
   - deploy
 
-staging:
-  stage: deploy
-  image: ruby:latest
+variables:
+  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+
+build_frontend:
+  stage: build
+  image: node:latest
   script:
     - cd frontend
-    - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    - yarn install
+    - yarn run build
+  artifacts:
+    paths:
+      - ./build
   only:
-    - stage # Will run only on the staging branch
+    - stage
+
+deploy_to_s3_stage:
+  stage: deploy
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
+  script:
+    - aws s3 sync --delete ./build s3://$AWS_STAGING_S3 
+  only:
+    - stage
