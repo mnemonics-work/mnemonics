@@ -1,14 +1,35 @@
 import React, { Component } from "react";
 import { Tag } from "antd";
+import { MnemonicTypesApi } from "../../global/api";
+import { MnemonicType } from "../../global/generated-api";
 
-export class Labels extends Component<{ labels?: string[] }, never> {
-    render(): JSX.Element | undefined {
-        const { labels } = this.props;
-        let listOfLabels: JSX.Element[] = [];
+interface LabelsState {
+    mnemonicTypes: MnemonicType[];
+}
+
+export class Labels extends Component<{ labels?: Set<number> | null }, LabelsState> {
+    state: LabelsState = {
+        mnemonicTypes: [],
+    };
+
+    async componentDidMount(): Promise<void> {
+        let mnemonicTypes: MnemonicType[] = [];
+        const labels = this.props.labels;
         if (labels) {
-            listOfLabels = labels.map((label) => <Tag key={label}>{label}</Tag>);
-            return <div>{listOfLabels}</div>;
+            const arrayLabels = Array.from(labels);
+            const availableLabels = await MnemonicTypesApi.mnemonicTypesList();
+            // TODO manage filtering in backend
+            mnemonicTypes = availableLabels.filter((mnemonicType: MnemonicType) => {
+                if (mnemonicType && mnemonicType.id) {
+                    return arrayLabels.includes(mnemonicType.id);
+                }
+                return false;
+            });
         }
-        return undefined;
+        this.setState({ mnemonicTypes: mnemonicTypes });
+    }
+
+    render(): JSX.Element[] {
+        return this.state.mnemonicTypes.map((mnemonicType) => <Tag key={mnemonicType.id}>{mnemonicType.label}</Tag>);
     }
 }

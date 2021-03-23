@@ -3,6 +3,7 @@ image: node:latest
 stages:
   - build
   - deploy
+  - backend-tests
 
 build_frontend:
   stage: build
@@ -31,3 +32,15 @@ deploy_to_s3_stage:
     - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3 
   only:
     - stage
+
+backend_tests:
+  stage: backend-tests
+  image: python:3.6.2
+  before_script:
+    - cd backend
+    - pip install -r requirements.txt
+  script:
+    - python manage.py test
+  only:
+    - merge_requests
+

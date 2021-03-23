@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { MnemonicsCard } from "../MnemonicCard";
 import { Pagination, Space, Spin } from "antd";
 import "./styles.scss";
-import { backendApi, MnemonicCardData } from "../../global/api";
+import { MnemonicsApi } from "../../global/api";
+import { Mnemonic } from "../../global/generated-api";
 
 interface MnemonicCardsState {
-    mnemonicCards: MnemonicCardData[];
+    mnemonicCards: Mnemonic[];
     current: number;
     loaded: boolean;
 }
@@ -20,11 +21,13 @@ export class CardList extends Component<unknown, MnemonicCardsState> {
         loaded: false,
     };
 
-    getDataPageFromApi(page: number, pageSize: number): void {
+    // TODO: Setup pagination in backend and setup in frontend to be used
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getDataPageFromApi(page: number, _pageSize: number): void {
         this.setState({ loaded: false });
-        backendApi.cardsList(page, pageSize).then((data) => {
-            this.total_cards = data["total"];
-            this.setState({ mnemonicCards: data["cards"], current: page, loaded: true });
+        MnemonicsApi.mnemonicsList().then((data) => {
+            this.total_cards = data.length;
+            this.setState({ mnemonicCards: data, current: page, loaded: true });
         });
     }
 
@@ -40,17 +43,12 @@ export class CardList extends Component<unknown, MnemonicCardsState> {
         const numOfEmptyCards = 4;
         return Array(numOfEmptyCards)
             .fill(null)
-            .map((_, idx) => <MnemonicsCard key={idx} empty={true} />);
+            .map((_, idx) => <MnemonicsCard key={idx} mnemnonicContent={null} />);
     }
 
     renderMnemonicCards(): JSX.Element[] {
         return this.state.mnemonicCards.map((mnemonic) => (
-            <MnemonicsCard
-                key={mnemonic.id}
-                title={mnemonic.title}
-                description={mnemonic.description}
-                types={mnemonic.types}
-            />
+            <MnemonicsCard key={mnemonic.id} mnemnonicContent={mnemonic} />
         ));
     }
 
