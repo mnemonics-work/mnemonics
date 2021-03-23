@@ -1,0 +1,443 @@
+swagger: '2.0'
+info:
+  title: v2.0 Documentation
+  description: Swagger Specification
+  version: v2
+host: 127.0.0.1:8000
+schemes:
+  - http
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+  - Basic: []
+paths:
+  /categories:
+    get:
+      operationId: categories_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+      tags:
+        - categories
+    parameters: []
+  /categories/{id}:
+    get:
+      operationId: categories_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Category'
+      tags:
+        - categories
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this category.
+        required: true
+        type: integer
+  /expressions:
+    get:
+      operationId: expressions_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Expression'
+      tags:
+        - expressions
+    post:
+      operationId: expressions_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Expression'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Expression'
+      tags:
+        - expressions
+    parameters: []
+  /expressions/{id}:
+    get:
+      operationId: expressions_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Expression'
+      tags:
+        - expressions
+    put:
+      operationId: expressions_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Expression'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Expression'
+      tags:
+        - expressions
+    patch:
+      operationId: expressions_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Expression'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Expression'
+      tags:
+        - expressions
+    delete:
+      operationId: expressions_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - expressions
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this expression.
+        required: true
+        type: integer
+  /mnemonicTypes:
+    get:
+      operationId: mnemonicTypes_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MnemonicType'
+      tags:
+        - mnemonicTypes
+    post:
+      operationId: mnemonicTypes_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      tags:
+        - mnemonicTypes
+    parameters: []
+  /mnemonicTypes/{id}:
+    get:
+      operationId: mnemonicTypes_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      tags:
+        - mnemonicTypes
+    put:
+      operationId: mnemonicTypes_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      tags:
+        - mnemonicTypes
+    patch:
+      operationId: mnemonicTypes_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/MnemonicType'
+      tags:
+        - mnemonicTypes
+    delete:
+      operationId: mnemonicTypes_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - mnemonicTypes
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this mnemonic type.
+        required: true
+        type: integer
+  /mnemonics:
+    get:
+      operationId: mnemonics_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Mnemonic'
+      tags:
+        - mnemonics
+    post:
+      operationId: mnemonics_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      tags:
+        - mnemonics
+    parameters: []
+  /mnemonics/{id}:
+    get:
+      operationId: mnemonics_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      tags:
+        - mnemonics
+    put:
+      operationId: mnemonics_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      tags:
+        - mnemonics
+    patch:
+      operationId: mnemonics_partial_update
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Mnemonic'
+      tags:
+        - mnemonics
+    delete:
+      operationId: mnemonics_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - mnemonics
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this mnemonic.
+        required: true
+        type: integer
+definitions:
+  Category:
+    required:
+      - title
+      - child_topics
+      - expressions
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        minLength: 1
+      parent_topic:
+        title: Parent topic
+        type: integer
+        x-nullable: true
+      child_topics:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      expressions:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Expression:
+    required:
+      - title
+      - mnemonics
+      - categories
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      mnemonics:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      categories:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  MnemonicType:
+    required:
+      - label
+      - mnemonics
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      label:
+        title: Label
+        type: string
+        maxLength: 256
+        minLength: 1
+      mnemonics:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Mnemonic:
+    required:
+      - title
+      - types
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      expression:
+        title: Expression
+        type: integer
+        x-nullable: true
+      source_url:
+        title: Source url
+        type: string
+        format: uri
+        maxLength: 2000
+        x-nullable: true
+      links:
+        type: array
+        items:
+          title: Links
+          type: string
+          format: uri
+          maxLength: 2000
+          minLength: 1
+        x-nullable: true
+      types:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true

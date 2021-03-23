@@ -6,18 +6,21 @@
     "yarn": "1.22.5"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.2.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "antd": "^4.12.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "dev": "webpack serve --mode=development",
     "build": "webpack --mode=production",
-    "lint": "eslint '*/**/*.{js,ts,tsx}'"
+    "lint": "eslint '*/**/*.{js,ts,tsx}'",
+    "generate-api": "rimraf src/global/generated-api && openapi-generator-cli generate"
   },
   "browserslist": {
     "production": [

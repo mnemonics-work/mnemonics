@@ -1,0 +1,13 @@
+.openapi-generator-ignore
+apis/CategoriesApi.ts
+apis/ExpressionsApi.ts
+apis/MnemonicTypesApi.ts
+apis/MnemonicsApi.ts
+apis/index.ts
+index.ts
+models/Category.ts
+models/Expression.ts
+models/Mnemonic.ts
+models/MnemonicType.ts
+models/index.ts
+runtime.ts
