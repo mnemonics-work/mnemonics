@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,10 @@ SECRET_KEY = '20@g7@9^wfswz9(%2!5)k+=yv)u@uy(_@e10bu33fy+1dcvt3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "mnemonics-work-staging.herokuapp.com",
+    # "127.0.0.1",  # For local development
+]
 
 
 # Application definition
@@ -41,6 +46,12 @@ INSTALLED_APPS = [
     'drf_yasg',
     'mnemonics',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'documentation.api_info',
@@ -60,7 +71,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8080",
+    # "http://localhost:8080",  # For local development
+    "http://mnemonics-stage.com.s3-website.us-east-2.amazonaws.com",  # Staging server
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -87,15 +99,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+EMPTY_DB_CONFIG = {} # To run simple tests, until we really need to mount a db for functional tests
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Mnemonics_DB',
-        'USER': 'mnemonics_user',
-        'PASSWORD': 'Mnemonic_Password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse(DATABASE_URL) if DATABASE_URL != None else EMPTY_DB_CONFIG
 }
 
 

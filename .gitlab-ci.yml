@@ -2,8 +2,8 @@ image: node:latest
 
 stages:
   - build
-  - deploy
   - backend-tests
+  - deploy
 
 build_frontend:
   stage: build
@@ -29,7 +29,20 @@ deploy_to_s3_stage:
     name: amazon/aws-cli
     entrypoint: [""]
   script:
-    - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3 
+    - aws s3 sync --delete ./frontend/build s3://$AWS_STAGING_S3
+  only:
+    - stage
+
+deploy_to_heroku:
+  stage: deploy
+  image: ruby:latest
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - cd backend
+    - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
   only:
     - stage
 
