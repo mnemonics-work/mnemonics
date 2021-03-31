@@ -16,6 +16,8 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
+dj-database-url==0.5.0
+    # via -r requirements.in
 django-cors-headers==3.7.0
     # via -r requirements.in
 django==3.1.7
@@ -29,6 +31,8 @@ djangorestframework==3.12.2
     #   -r requirements.in
     #   drf-yasg
 drf-yasg==1.20.0
+    # via -r requirements.in
+gunicorn==20.0.4
     # via -r requirements.in
 idna==2.10
     # via requests
@@ -62,3 +66,6 @@ uritemplate==3.0.1
     #   drf-yasg
 urllib3==1.26.3
     # via requests
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

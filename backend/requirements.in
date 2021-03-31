@@ -3,3 +3,5 @@ djangorestframework
 psycopg2
 drf-yasg
 django-cors-headers
+dj-database-url
+gunicorn
