@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.pagination import LimitOffsetPagination
 
 from mnemonics.models import Category, Expression, Mnemonic, MnemonicType
 from mnemonics.serializers import CategorySerializer, ExpressionSerializer, MnemonicSerializer, MnemonicTypeSerializer
@@ -17,7 +18,7 @@ class ExpressionViewSet(viewsets.ModelViewSet):
 class MnemonicsViewSet(viewsets.ModelViewSet):
     serializer_class = MnemonicSerializer
     queryset = Mnemonic.objects.all()
-    # TODO: Add pagination
+    pagination_class = LimitOffsetPagination
 
 
 class MnemonicTypeViewSet(viewsets.ModelViewSet):

@@ -3,7 +3,7 @@ import { MnemonicsCard } from "../MnemonicCard";
 import { Pagination, Space, Spin } from "antd";
 import "./styles.scss";
 import { MnemonicsApi } from "../../global/api";
-import { Mnemonic } from "../../global/generated-api";
+import { Mnemonic, MnemonicsListRequest } from "../../global/generated-api";
 
 interface MnemonicCardsState {
     mnemonicCards: Mnemonic[];
@@ -21,13 +21,16 @@ export class CardList extends Component<unknown, MnemonicCardsState> {
         loaded: false,
     };
 
-    // TODO: Setup pagination in backend and setup in frontend to be used
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getOffset(currentPage: number, pageSize: number): number {
+        return (currentPage - 1) * pageSize;
+    }
+
     getDataPageFromApi(page: number, _pageSize: number): void {
         this.setState({ loaded: false });
-        MnemonicsApi.mnemonicsList().then((data) => {
-            this.total_cards = data.length;
-            this.setState({ mnemonicCards: data, current: page, loaded: true });
+        const requestParams: MnemonicsListRequest = { limit: _pageSize, offset: this.getOffset(page, _pageSize) };
+        MnemonicsApi.mnemonicsList(requestParams).then((data) => {
+            this.total_cards = data.count;
+            this.setState({ mnemonicCards: data.results, current: page, loaded: true });
         });
     }
 
