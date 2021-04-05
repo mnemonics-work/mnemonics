@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    InlineResponse200,
+    InlineResponse200FromJSON,
+    InlineResponse200ToJSON,
     Mnemonic,
     MnemonicFromJSON,
     MnemonicToJSON,
@@ -26,6 +29,11 @@ export interface MnemonicsCreateRequest {
 
 export interface MnemonicsDeleteRequest {
     id: number;
+}
+
+export interface MnemonicsListRequest {
+    limit?: number;
+    offset?: number;
 }
 
 export interface MnemonicsPartialUpdateRequest {
@@ -113,8 +121,16 @@ export class MnemonicsApi extends runtime.BaseAPI {
 
     /**
      */
-    async mnemonicsListRaw(): Promise<runtime.ApiResponse<Array<Mnemonic>>> {
+    async mnemonicsListRaw(requestParameters: MnemonicsListRequest): Promise<runtime.ApiResponse<InlineResponse200>> {
         const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -128,13 +144,13 @@ export class MnemonicsApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MnemonicFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse200FromJSON(jsonValue));
     }
 
     /**
      */
-    async mnemonicsList(): Promise<Array<Mnemonic>> {
-        const response = await this.mnemonicsListRaw();
+    async mnemonicsList(requestParameters: MnemonicsListRequest): Promise<InlineResponse200> {
+        const response = await this.mnemonicsListRaw(requestParameters);
         return await response.value();
     }
 
