@@ -49,6 +49,12 @@ export interface Category {
      * @memberof Category
      */
     expressions: Set<number>;
+    /**
+     * 
+     * @type {Set<number>}
+     * @memberof Category
+     */
+    tags?: Set<number>;
 }
 
 export function CategoryFromJSON(json: any): Category {
@@ -66,6 +72,7 @@ export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'parentTopic': !exists(json, 'parent_topic') ? undefined : json['parent_topic'],
         'childTopics': json['child_topics'],
         'expressions': json['expressions'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
 }
 
@@ -82,6 +89,7 @@ export function CategoryToJSON(value?: Category | null): any {
         'parent_topic': value.parentTopic,
         'child_topics': value.childTopics,
         'expressions': value.expressions,
+        'tags': value.tags,
     };
 }
 

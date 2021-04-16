@@ -346,6 +346,39 @@ paths:
         description: A unique integer value identifying this mnemonic.
         required: true
         type: integer
+  /tags:
+    get:
+      operationId: tags_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+      tags:
+        - tags
+    parameters: []
+  /tags/{id}:
+    get:
+      operationId: tags_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Tag'
+      tags:
+        - tags
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this tag.
+        required: true
+        type: integer
 definitions:
   Category:
     required:
@@ -376,11 +409,17 @@ definitions:
         items:
           type: integer
         uniqueItems: true
+      tags:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
   Expression:
     required:
       - title
       - mnemonics
       - categories
+      - tags
     type: object
     properties:
       id:
@@ -401,6 +440,11 @@ definitions:
           type: integer
         uniqueItems: true
       categories:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      tags:
         type: array
         items:
           type: integer
@@ -467,3 +511,22 @@ definitions:
         items:
           type: integer
         uniqueItems: true
+      tags:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Tag:
+    required:
+      - label
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      label:
+        title: Label
+        type: string
+        maxLength: 256
+        minLength: 1

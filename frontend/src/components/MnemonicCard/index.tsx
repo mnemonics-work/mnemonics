@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Card, Typography, Space, Skeleton } from "antd";
 import { Labels } from "../Labels";
 import "./styles.scss";
-import { Mnemonic } from "../../global/generated-api";
+import { Mnemonic } from "global/generated-api";
+import { LabelType } from "../Labels";
 
 const { Paragraph } = Typography;
 
@@ -20,7 +21,7 @@ export class MnemonicsCard extends Component<{ mnemnonicContent: Mnemonic | null
             <Card className="card" title={mnemonic.title} extra={<a href="#"> Open </a>}>
                 <Space direction="vertical" size="large">
                     <Paragraph ellipsis={{ rows: 7, expandable: false }}>{mnemonic.description}</Paragraph>
-                    <Labels labels={mnemonic.types} />
+                    <Labels labels={mnemonic.types} labelType={LabelType.mnemonicType} />
                 </Space>
             </Card>
         );

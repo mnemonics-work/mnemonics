@@ -3,6 +3,7 @@ apis/CategoriesApi.ts
 apis/ExpressionsApi.ts
 apis/MnemonicTypesApi.ts
 apis/MnemonicsApi.ts
+apis/TagsApi.ts
 apis/index.ts
 index.ts
 models/Category.ts
@@ -10,5 +11,6 @@ models/Expression.ts
 models/InlineResponse200.ts
 models/Mnemonic.ts
 models/MnemonicType.ts
+models/Tag.ts
 models/index.ts
 runtime.ts
