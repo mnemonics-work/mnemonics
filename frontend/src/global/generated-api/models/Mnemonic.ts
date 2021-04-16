@@ -61,6 +61,12 @@ export interface Mnemonic {
      * @memberof Mnemonic
      */
     types: Set<number>;
+    /**
+     * 
+     * @type {Set<number>}
+     * @memberof Mnemonic
+     */
+    tags?: Set<number>;
 }
 
 export function MnemonicFromJSON(json: any): Mnemonic {
@@ -80,6 +86,7 @@ export function MnemonicFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'sourceUrl': !exists(json, 'source_url') ? undefined : json['source_url'],
         'links': !exists(json, 'links') ? undefined : json['links'],
         'types': json['types'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
 }
 
@@ -98,6 +105,7 @@ export function MnemonicToJSON(value?: Mnemonic | null): any {
         'source_url': value.sourceUrl,
         'links': value.links,
         'types': value.types,
+        'tags': value.tags,
     };
 }
 

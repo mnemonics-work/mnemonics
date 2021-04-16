@@ -11,7 +11,10 @@ const config = {
     },
     target: 'web',
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+        extensions: ['.ts', '.tsx', '.js'],
+        alias: {
+            global: path.resolve(__dirname, "src/global")
+        }
     },
     devtool: 'source-map',
     devServer: {
@@ -39,7 +42,8 @@ const config = {
     ],
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build')
+        path: path.resolve(__dirname, 'build'),
+        publicPath: '/',
     },
 }
 

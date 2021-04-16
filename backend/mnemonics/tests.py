@@ -15,15 +15,14 @@ class TestOpenAPISpec(SimpleTestCase):
         If this tests fails, you need to regenerate the OpenAPI spec
         """
         spec_path = os.path.join(
-            os.path.abspath(os.path.dirname(__file__)),
-            '../api.yaml'
+            os.path.abspath(os.path.dirname(__file__)), "../api.yaml"
         )
         with open(spec_path) as file:
             committed_spec = file.read()
             out = StringIO()
             call_command(
-                'generate_swagger',
-                '--format=yaml',
+                "generate_swagger",
+                "--format=yaml",
                 stdout=out,
             )
             generated_spec = out.getvalue()

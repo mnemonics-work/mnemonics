@@ -49,6 +49,12 @@ export interface Expression {
      * @memberof Expression
      */
     categories: Set<number>;
+    /**
+     * 
+     * @type {Set<number>}
+     * @memberof Expression
+     */
+    tags: Set<number>;
 }
 
 export function ExpressionFromJSON(json: any): Expression {
@@ -66,6 +72,7 @@ export function ExpressionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'description': !exists(json, 'description') ? undefined : json['description'],
         'mnemonics': json['mnemonics'],
         'categories': json['categories'],
+        'tags': json['tags'],
     };
 }
 
@@ -82,6 +89,7 @@ export function ExpressionToJSON(value?: Expression | null): any {
         'description': value.description,
         'mnemonics': value.mnemonics,
         'categories': value.categories,
+        'tags': value.tags,
     };
 }
 
