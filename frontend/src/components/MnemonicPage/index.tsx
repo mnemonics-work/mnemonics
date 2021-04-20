@@ -81,7 +81,7 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
             <Layout className="layout">
                 <Content className="mnemonic-content">
                     <Row>
-                        <Col span={6} offset={6}>
+                        <Col span={12} offset={6}>
                             <Typography>
                                 <PageHeader
                                     className="mnemonic-header"

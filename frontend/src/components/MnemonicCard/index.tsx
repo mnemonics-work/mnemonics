@@ -17,8 +17,9 @@ export class MnemonicsCard extends Component<{ mnemnonicContent: Mnemonic | null
     }
 
     renderCardContent(mnemonic: Mnemonic): JSX.Element {
+        const mnemonicCardUrl: string = "/mnemonic/" + mnemonic.id;
         return (
-            <Card className="card" title={mnemonic.title} extra={<a href="#"> Open </a>}>
+            <Card className="card" title={mnemonic.title} extra={<a href={mnemonicCardUrl}> Open </a>}>
                 <Space direction="vertical" size="large">
                     <Paragraph ellipsis={{ rows: 7, expandable: false }}>{mnemonic.description}</Paragraph>
                     <Labels labels={mnemonic.types} labelType={LabelType.mnemonicType} />
