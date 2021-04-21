@@ -54,7 +54,7 @@ export interface Expression {
      * @type {Set<number>}
      * @memberof Expression
      */
-    tags: Set<number>;
+    tags?: Set<number>;
 }
 
 export function ExpressionFromJSON(json: any): Expression {
@@ -72,7 +72,7 @@ export function ExpressionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'description': !exists(json, 'description') ? undefined : json['description'],
         'mnemonics': json['mnemonics'],
         'categories': json['categories'],
-        'tags': json['tags'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
 }
 

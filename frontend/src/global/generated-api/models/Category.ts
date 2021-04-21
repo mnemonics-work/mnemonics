@@ -48,7 +48,7 @@ export interface Category {
      * @type {Set<number>}
      * @memberof Category
      */
-    expressions: Set<number>;
+    expressions?: Set<number>;
     /**
      * 
      * @type {Set<number>}
@@ -71,7 +71,7 @@ export function CategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'title': json['title'],
         'parentTopic': !exists(json, 'parent_topic') ? undefined : json['parent_topic'],
         'childTopics': json['child_topics'],
-        'expressions': json['expressions'],
+        'expressions': !exists(json, 'expressions') ? undefined : json['expressions'],
         'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
 }

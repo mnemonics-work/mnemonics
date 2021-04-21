@@ -32,6 +32,9 @@ export interface MnemonicsDeleteRequest {
 }
 
 export interface MnemonicsListRequest {
+    search?: string;
+    tags?: Array<number>;
+    types?: Array<number>;
     limit?: number;
     offset?: number;
 }
@@ -123,6 +126,18 @@ export class MnemonicsApi extends runtime.BaseAPI {
      */
     async mnemonicsListRaw(requestParameters: MnemonicsListRequest): Promise<runtime.ApiResponse<InlineResponse200>> {
         const queryParameters: any = {};
+
+        if (requestParameters.search !== undefined) {
+            queryParameters['search'] = requestParameters.search;
+        }
+
+        if (requestParameters.tags) {
+            queryParameters['tags'] = requestParameters.tags.join(runtime.COLLECTION_FORMATS["csv"]);
+        }
+
+        if (requestParameters.types) {
+            queryParameters['types'] = requestParameters.types.join(runtime.COLLECTION_FORMATS["csv"]);
+        }
 
         if (requestParameters.limit !== undefined) {
             queryParameters['limit'] = requestParameters.limit;
