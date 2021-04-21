@@ -36,7 +36,7 @@ export interface MnemonicType {
      * @type {Set<number>}
      * @memberof MnemonicType
      */
-    mnemonics: Set<number>;
+    mnemonics?: Set<number>;
 }
 
 export function MnemonicTypeFromJSON(json: any): MnemonicType {
@@ -51,7 +51,7 @@ export function MnemonicTypeFromJSONTyped(json: any, ignoreDiscriminator: boolea
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'label': json['label'],
-        'mnemonics': json['mnemonics'],
+        'mnemonics': !exists(json, 'mnemonics') ? undefined : json['mnemonics'],
     };
 }
 

@@ -235,6 +235,23 @@ paths:
       operationId: mnemonics_list
       description: ''
       parameters:
+        - name: search
+          in: query
+          description: A search term.
+          required: false
+          type: string
+        - name: tags
+          in: query
+          description: Tags ids separated by commas
+          type: array
+          items:
+            type: integer
+        - name: types
+          in: query
+          description: Mnemonic types ids separated by commas
+          type: array
+          items:
+            type: integer
         - name: limit
           in: query
           description: Number of results to return per page.
@@ -384,7 +401,6 @@ definitions:
     required:
       - title
       - child_topics
-      - expressions
     type: object
     properties:
       id:
@@ -419,7 +435,6 @@ definitions:
       - title
       - mnemonics
       - categories
-      - tags
     type: object
     properties:
       id:
@@ -452,7 +467,6 @@ definitions:
   MnemonicType:
     required:
       - label
-      - mnemonics
     type: object
     properties:
       id:
