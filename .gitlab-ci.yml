@@ -7,7 +7,7 @@ stages:
 
 build_frontend:
   stage: build
-  image: node:latest
+  image: node:15.8.0
 
   cache:
     paths:
