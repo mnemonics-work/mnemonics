@@ -7,7 +7,7 @@ from io import StringIO
 
 
 class TestOpenAPISpec(SimpleTestCase):
-    """ Test for the generated OpenAPI specification"""
+    """Test for the generated OpenAPI specification"""
 
     def test_generate_swagger_output_matches_committed_spec(self):
         """
