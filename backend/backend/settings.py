@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "mnemonics",
     "django_filters",
+    "django_extensions",
 ]
 
 REST_FRAMEWORK = {

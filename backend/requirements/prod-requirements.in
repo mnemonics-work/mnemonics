@@ -1,10 +1,9 @@
-black
 django
+django-extensions
 django-filter
 djangorestframework
-psycopg2
 drf-yasg
+psycopg2
 django-cors-headers
 dj-database-url
-flake8
 gunicorn
