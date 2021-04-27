@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Labels } from "../Labels";
 import { Typography, List, PageHeader, Layout, Spin, Row, Col } from "antd";
-import { ExpressionsApi, MnemonicsApi } from "global/api";
-import { Mnemonic, MnemonicsReadRequest, Expression, ExpressionsReadRequest } from "global/generated-api";
+import { ExpressionsApi, MnemonicsApi, CategoriesApi } from "global/api";
+import { Mnemonic, MnemonicsReadRequest, Expression, ExpressionsReadRequest, Category } from "global/generated-api";
 import { LabelType } from "../Labels";
 import "./styles.scss";
 
@@ -14,6 +14,7 @@ interface MnemonicPageState {
     mnemonic: Mnemonic | undefined;
     loaded: boolean;
     expression: Expression | undefined;
+    categories: Category[];
 }
 
 interface RouteParams {
@@ -25,6 +26,7 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
         mnemonic: undefined,
         loaded: false,
         expression: undefined,
+        categories: [],
     };
 
     getMnemonicDataFromApi(mnemonicId: number): void {
@@ -43,14 +45,28 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
         this.getMnemonicDataFromApi(+this.props.match.params.mnemonicId);
     }
 
+    getRelatedCategories(categoriesId: number[]): void {
+        // TODO filter by categories Ids(list)
+        CategoriesApi.categoriesList().then((data) => {
+            const categories = data.filter((category) => {
+                if (category && category.id) {
+                    return categoriesId.includes(category.id);
+                }
+            });
+            this.setState({ categories });
+        });
+    }
+
     getExpression(expressionId: number): void {
         const requestParams: ExpressionsReadRequest = { id: expressionId };
         ExpressionsApi.expressionsRead(requestParams).then((data) => {
+            const categories = Array.from(data.categories);
             this.setState({
                 mnemonic: this.state.mnemonic,
                 loaded: this.state.loaded,
                 expression: data,
             });
+            this.getRelatedCategories(categories);
         });
     }
 
@@ -112,6 +128,14 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
                                     <Title level={3}>Types</Title>
                                     <Paragraph>
                                         <Labels labels={mnemonicData.types} labelType={LabelType.mnemonicType} />
+                                    </Paragraph>
+                                    <Title level={3}> Categories </Title>
+                                    <Paragraph>
+                                        <List
+                                            size="small"
+                                            dataSource={this.state.categories}
+                                            renderItem={(item) => <List.Item>{item.title}</List.Item>}
+                                        />
                                     </Paragraph>
                                 </div>
                             </Typography>

@@ -1,4 +1,4 @@
--c prod-requirements.txt
+-r prod-requirements.in
 black
 flake8
 pygraphviz
