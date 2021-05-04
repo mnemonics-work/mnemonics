@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { MnemonicsCard } from "../MnemonicCard";
 import { Pagination, Spin, Input, Card, Checkbox, Divider, Empty } from "antd";
+
 import { MnemonicsApi, TagsApi, MnemonicTypesApi } from "global/api";
 import { Mnemonic, MnemonicsListRequest, Tag, MnemonicType } from "global/generated-api";
+
+import { MnemonicsCard } from "../MnemonicCard";
 import "./styles.scss";
 
 const { Search } = Input;

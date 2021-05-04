@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Card, Typography, Space, Skeleton } from "antd";
-import { Labels } from "../Labels";
-import "./styles.scss";
+
 import { Mnemonic } from "global/generated-api";
-import { LabelType } from "../Labels";
+
+import { Labels, LabelType } from "../Labels";
+import "./styles.scss";
 
 const { Paragraph } = Typography;
 

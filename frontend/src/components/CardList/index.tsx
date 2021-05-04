@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { MnemonicsCard } from "../MnemonicCard";
 import { Pagination, Space, Spin } from "antd";
-import "./styles.scss";
+
 import { MnemonicsApi } from "global/api";
 import { Mnemonic, MnemonicsListRequest } from "global/generated-api";
+
+import { MnemonicsCard } from "../MnemonicCard";
+import "./styles.scss";
 
 interface MnemonicCardsState {
     mnemonicCards: Mnemonic[];

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Tag } from "antd";
+
 import { MnemonicTypesApi, TagsApi } from "global/api";
 import { MnemonicType, Tag as MnemonicTag } from "global/generated-api";
 

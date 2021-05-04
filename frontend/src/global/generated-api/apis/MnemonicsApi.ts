@@ -35,6 +35,7 @@ export interface MnemonicsListRequest {
     search?: string;
     tags?: Array<number>;
     types?: Array<number>;
+    ids?: Array<number>;
     limit?: number;
     offset?: number;
 }
@@ -137,6 +138,10 @@ export class MnemonicsApi extends runtime.BaseAPI {
 
         if (requestParameters.types) {
             queryParameters['types'] = requestParameters.types.join(runtime.COLLECTION_FORMATS["csv"]);
+        }
+
+        if (requestParameters.ids) {
+            queryParameters['ids'] = requestParameters.ids.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters.limit !== undefined) {

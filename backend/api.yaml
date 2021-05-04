@@ -252,6 +252,12 @@ paths:
           type: array
           items:
             type: integer
+        - name: ids
+          in: query
+          description: Mnemonic ids separated by commas
+          type: array
+          items:
+            type: integer
         - name: limit
           in: query
           description: Number of results to return per page.

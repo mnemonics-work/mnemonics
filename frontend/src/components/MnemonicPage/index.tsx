@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { Labels } from "../Labels";
 import { Typography, List, PageHeader, Layout, Spin, Row, Col } from "antd";
+
 import { ExpressionsApi, MnemonicsApi, CategoriesApi } from "global/api";
 import { Mnemonic, MnemonicsReadRequest, Expression, ExpressionsReadRequest, Category } from "global/generated-api";
-import { LabelType } from "../Labels";
+
+import { Labels, LabelType } from "../Labels";
 import "./styles.scss";
 
 const { Title, Paragraph } = Typography;
@@ -93,6 +94,7 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
         let mnemonicDataLinks: string[] = [];
         mnemonicDataLinks = mnemonicData.links.filter((link) => link != undefined);
         const expressionTitle = this.state.expression?.title;
+        const expressionUrl = "/expression/" + this.state.expression?.id;
         return (
             <Layout className="layout">
                 <Content className="mnemonic-content">
@@ -108,7 +110,9 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
                                     <Title level={3}>Description</Title>
                                     <Paragraph>{mnemonicData.description}</Paragraph>
                                     <Title level={3}>Expression</Title>
-                                    <Paragraph>{expressionTitle}</Paragraph>
+                                    <Paragraph>
+                                        <a href={expressionUrl}>{expressionTitle}</a>
+                                    </Paragraph>
                                     <Title level={3}>Source</Title>
                                     <Paragraph>
                                         <a>{mnemonicData.sourceUrl}</a>
