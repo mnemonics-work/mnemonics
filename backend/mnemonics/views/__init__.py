@@ -4,7 +4,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from mnemonics.filters import TagsAndTypesFilter
+from mnemonics.filters import MnemonicsFilter
 from mnemonics.models import Category, Expression, Mnemonic, MnemonicType, Tag
 from mnemonics.serializers import (
     CategorySerializer,
@@ -30,11 +30,18 @@ class MnemonicsViewSet(viewsets.ModelViewSet):
     queryset = Mnemonic.objects.all()
     pagination_class = LimitOffsetPagination
     search_fields = ["title", "description"]
-    filter_class = TagsAndTypesFilter
+    filter_class = MnemonicsFilter
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
 
     @swagger_auto_schema(
         manual_parameters=[
+            openapi.Parameter(
+                "ids",
+                openapi.IN_QUERY,
+                description="Mnemonic ids separated by commas",
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(type=openapi.TYPE_INTEGER),
+            ),
             openapi.Parameter(
                 "tags",
                 openapi.IN_QUERY,
