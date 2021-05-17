@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Typography, List, PageHeader, Layout, Spin, Row, Col } from "antd";
 
-import { ExpressionsApi, MnemonicsApi, CategoriesApi } from "global/api";
-import { Mnemonic, MnemonicsReadRequest, Expression, ExpressionsReadRequest, Category } from "global/generated-api";
+import { ExpressionsApi, MnemonicsApi } from "global/api";
+import {
+    Mnemonic,
+    MnemonicsReadRequest,
+    Expression,
+    ExpressionsReadRequest,
+    Category,
+    ExpressionsRelatedCategoriesRequest,
+} from "global/generated-api";
 
 import { Labels, LabelType } from "../Labels";
 import "./styles.scss";
@@ -46,28 +53,22 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
         this.getMnemonicDataFromApi(+this.props.match.params.mnemonicId);
     }
 
-    getRelatedCategories(categoriesId: number[]): void {
-        // TODO filter by categories Ids(list)
-        CategoriesApi.categoriesList().then((data) => {
-            const categories = data.filter((category) => {
-                if (category && category.id) {
-                    return categoriesId.includes(category.id);
-                }
-            });
-            this.setState({ categories });
+    getRelatedCategories(expressionId: number): void {
+        const requestParams: ExpressionsRelatedCategoriesRequest = { id: expressionId };
+        ExpressionsApi.expressionsRelatedCategories(requestParams).then((data) => {
+            this.setState({ categories: data });
         });
     }
 
     getExpression(expressionId: number): void {
         const requestParams: ExpressionsReadRequest = { id: expressionId };
         ExpressionsApi.expressionsRead(requestParams).then((data) => {
-            const categories = Array.from(data.categories);
             this.setState({
                 mnemonic: this.state.mnemonic,
                 loaded: this.state.loaded,
                 expression: data,
             });
-            this.getRelatedCategories(categories);
+            this.getRelatedCategories(expressionId);
         });
     }
 

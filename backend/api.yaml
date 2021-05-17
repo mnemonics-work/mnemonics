@@ -140,6 +140,26 @@ paths:
         description: A unique integer value identifying this expression.
         required: true
         type: integer
+  /expressions/{id}/related_categories:
+    get:
+      operationId: expressions_related_categories
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+      tags:
+        - expressions
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this expression.
+        required: true
+        type: integer
   /mnemonicTypes:
     get:
       operationId: mnemonicTypes_list
