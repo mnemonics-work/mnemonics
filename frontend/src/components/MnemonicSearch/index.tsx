@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Pagination, Spin, Input, Card, Checkbox, Divider, Empty } from "antd";
+import { RouteComponentProps } from "react-router-dom";
+import { Card, Checkbox, Divider, Empty, Input, Pagination, Spin } from "antd";
 
-import { MnemonicsApi, TagsApi, MnemonicTypesApi } from "global/api";
-import { Mnemonic, MnemonicsListRequest, Tag, MnemonicType } from "global/generated-api";
+import { MnemonicsApi, MnemonicTypesApi, TagsApi } from "global/api";
+import { Mnemonic, MnemonicsListRequest, MnemonicType, Tag } from "global/generated-api";
 
 import { MnemonicsCard } from "../MnemonicCard";
 import "./styles.scss";
@@ -23,9 +24,13 @@ interface CheckboxOption {
     value: number;
 }
 
+interface RouteParams {
+    query: string;
+}
+
 declare type CheckboxValue = number | string | boolean;
 
-export class MnemonicSearch extends Component<unknown, MnemonicSearchState> {
+export class MnemonicSearch extends Component<RouteComponentProps<RouteParams>, MnemonicSearchState> {
     PAGE_SIZE = 8;
     total_cards = 1;
     selectedTags: number[] = [];
@@ -74,20 +79,18 @@ export class MnemonicSearch extends Component<unknown, MnemonicSearchState> {
     };
 
     async getAllTagsFromApi(): Promise<Tag[]> {
-        const tags: Tag[] = await TagsApi.tagsList();
-        return tags;
+        return await TagsApi.tagsList();
     }
 
     async getAllMnemonicTypesFromApi(): Promise<MnemonicType[]> {
-        const mnemonicTypes: MnemonicType[] = await MnemonicTypesApi.mnemonicTypesList();
-        return mnemonicTypes;
+        return await MnemonicTypesApi.mnemonicTypesList();
     }
 
     async componentDidMount(): Promise<void> {
         const tags = await this.getAllTagsFromApi();
         const mnemonicTypes = await this.getAllMnemonicTypesFromApi();
         this.setState({ tags, mnemonicTypes, loaded: true });
-        await this.searchAndFilter("", this.selectedTags, this.selectedMnemonicTypes, 1);
+        await this.searchAndFilter(this.props.match.params.query, this.selectedTags, this.selectedMnemonicTypes, 1);
     }
 
     updateSelectedTags = (checkedValues: CheckboxValue[]): void => {
@@ -137,7 +140,12 @@ export class MnemonicSearch extends Component<unknown, MnemonicSearchState> {
         return (
             <Card title="Search Mnemonics">
                 <div className="search-menu">
-                    <Search placeholder="Title or description" enterButton="Search" onSearch={this.onSearch} />
+                    <Search
+                        placeholder="Title or description"
+                        enterButton="Search"
+                        defaultValue={this.props.match.params.query}
+                        onSearch={this.onSearch}
+                    />
                     <div className="tags">
                         <Divider orientation="left" plain>
                             Tags
