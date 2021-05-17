@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    Category,
+    CategoryFromJSON,
+    CategoryToJSON,
     Expression,
     ExpressionFromJSON,
     ExpressionToJSON,
@@ -34,6 +37,10 @@ export interface ExpressionsPartialUpdateRequest {
 }
 
 export interface ExpressionsReadRequest {
+    id: number;
+}
+
+export interface ExpressionsRelatedCategoriesRequest {
     id: number;
 }
 
@@ -204,6 +211,37 @@ export class ExpressionsApi extends runtime.BaseAPI {
      */
     async expressionsRead(requestParameters: ExpressionsReadRequest): Promise<Expression> {
         const response = await this.expressionsReadRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async expressionsRelatedCategoriesRaw(requestParameters: ExpressionsRelatedCategoriesRequest): Promise<runtime.ApiResponse<Array<Category>>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling expressionsRelatedCategories.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        const response = await this.request({
+            path: `/expressions/{id}/related_categories`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CategoryFromJSON));
+    }
+
+    /**
+     */
+    async expressionsRelatedCategories(requestParameters: ExpressionsRelatedCategoriesRequest): Promise<Array<Category>> {
+        const response = await this.expressionsRelatedCategoriesRaw(requestParameters);
         return await response.value();
     }
 
