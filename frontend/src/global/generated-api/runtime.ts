@@ -13,7 +13,7 @@
  */
 
 
-export const BASE_PATH = "http://127.0.0.1:8000/api".replace(/\/+$/, "");
+export const BASE_PATH = "http://127.0.0.1:8000".replace(/\/+$/, "");
 
 const isBlob = (value: any) => typeof Blob !== 'undefined' && value instanceof Blob;
 

@@ -2,5 +2,6 @@
 target-version = ['py27','py36']
 include = '\.pyi?$'
 exclude = '''
-    /mnemonics/migrations/
+      /mnemonics/migrations/
+    | /analytics/migrations/
 '''

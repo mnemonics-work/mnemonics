@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Pagination, Space, Spin } from "antd";
 
-import { MnemonicsApi } from "global/api";
-import { Mnemonic, MnemonicsListRequest } from "global/generated-api";
+import { MnemonicsAppApi } from "global/api";
+import { Mnemonic, ApiMnemonicsListRequest } from "global/generated-api";
 
 import { MnemonicsCard } from "../MnemonicCard";
 import "./styles.scss";
@@ -29,8 +29,8 @@ export class CardList extends Component<unknown, MnemonicCardsState> {
 
     getDataPageFromApi(page: number, _pageSize: number): void {
         this.setState({ loaded: false });
-        const requestParams: MnemonicsListRequest = { limit: _pageSize, offset: this.getOffset(page, _pageSize) };
-        MnemonicsApi.mnemonicsList(requestParams).then((data) => {
+        const requestParams: ApiMnemonicsListRequest = { limit: _pageSize, offset: this.getOffset(page, _pageSize) };
+        MnemonicsAppApi.apiMnemonicsList(requestParams).then((data) => {
             this.total_cards = data.count;
             this.setState({ mnemonicCards: data.results, current: page, loaded: true });
         });

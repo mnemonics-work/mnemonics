@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Tag } from "antd";
 
-import { MnemonicTypesApi, TagsApi } from "global/api";
+import { MnemonicsAppApi } from "global/api";
 import { MnemonicType, Tag as MnemonicTag } from "global/generated-api";
 
 interface LabelsState {
@@ -25,7 +25,7 @@ export class Labels extends Component<{ labels?: Set<number> | null; labelType: 
         const { labels } = this.props;
         if (labels) {
             const arrayLabels = Array.from(labels);
-            const availableLabels = await MnemonicTypesApi.mnemonicTypesList();
+            const availableLabels = await MnemonicsAppApi.apiMnemonicTypesList();
             // TODO manage filtering in backend
             mnemonicTypes = availableLabels.filter((mnemonicType: MnemonicType) => {
                 if (mnemonicType && mnemonicType.id) {
@@ -42,7 +42,7 @@ export class Labels extends Component<{ labels?: Set<number> | null; labelType: 
         const { labels } = this.props;
         if (labels) {
             const arrayLabels = Array.from(labels);
-            const availableLabels = await TagsApi.tagsList();
+            const availableLabels = await MnemonicsAppApi.apiTagsList();
             // TODO manage filtering in backend
             mnemonicTags = availableLabels.filter((mnemonicTag: MnemonicTag) => {
                 if (mnemonicTag && mnemonicTag.id) {

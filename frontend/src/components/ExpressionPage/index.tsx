@@ -1,12 +1,19 @@
-import React, { Component } from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { Typography, List, PageHeader, Layout, Spin, Row, Col, Pagination } from "antd";
+import React, {Component} from "react";
+import {RouteComponentProps} from "react-router-dom";
+import {Col, Layout, List, PageHeader, Pagination, Row, Spin, Typography} from "antd";
 
-import { ExpressionsApi, MnemonicsApi, CategoriesApi } from "global/api";
-import { Mnemonic, Expression, ExpressionsReadRequest, Category, MnemonicsListRequest } from "global/generated-api";
+import {MnemonicsAppApi} from "global/api";
+import {
+    ApiExpressionsReadRequest,
+    ApiExpressionsRelatedCategoriesRequest,
+    ApiMnemonicsListRequest,
+    Category,
+    Expression,
+    Mnemonic,
+} from "global/generated-api";
 
-import { MnemonicsCard } from "../MnemonicCard";
-import { Labels, LabelType } from "../Labels";
+import {MnemonicsCard} from "../MnemonicCard";
+import {Labels, LabelType} from "../Labels";
 import "./styles.scss";
 
 const { Title, Paragraph } = Typography;
@@ -36,8 +43,8 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
     };
 
     async getExpressionDataFromApi(expressionId: number): Promise<Expression> {
-        const requestParams: ExpressionsReadRequest = { id: expressionId };
-        return await ExpressionsApi.expressionsRead(requestParams);
+        const requestParams: ApiExpressionsReadRequest = { id: expressionId };
+        return await MnemonicsAppApi.apiExpressionsRead(requestParams);
     }
 
     getOffset(currentPage: number): number {
@@ -46,26 +53,20 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
 
     async getRelatedMnemonics(page: number, mnemonicsIds: number[]): Promise<Mnemonic[]> {
         // Get Paginated List of Mnemonics
-        const requestParams: MnemonicsListRequest = {
+        const requestParams: ApiMnemonicsListRequest = {
             limit: this.PAGE_SIZE,
             offset: this.getOffset(page),
             ids: mnemonicsIds,
         };
-        const data = await MnemonicsApi.mnemonicsList(requestParams);
+        const data = await MnemonicsAppApi.apiMnemonicsList(requestParams);
         this.total_cards = data.count;
         this.setState({ current: page });
         return data.results;
     }
 
-    async getRelatedCategories(categoriesId: number[]): Promise<Category[]> {
-        // TODO filter by categories Ids(list)
-        const allCategories = await CategoriesApi.categoriesList();
-        const categories = allCategories.filter((category: Category) => {
-            if (category && category.id) {
-                return categoriesId.includes(category.id);
-            }
-        });
-        return categories;
+    async getRelatedCategories(): Promise<Category[]> {
+        const requestParams: ApiExpressionsRelatedCategoriesRequest = { id: +this.props.match.params.expressionId };
+        return await MnemonicsAppApi.apiExpressionsRelatedCategories(requestParams);
     }
 
     onPageChange = async (page: number): Promise<void> => {
@@ -81,7 +82,7 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
         // From mnemonic ids get mnemonics
         const mnemonics = await this.getRelatedMnemonics(1, Array.from(expression.mnemonics));
         // From categories ids get categories
-        const categories = await this.getRelatedCategories(Array.from(expression.categories));
+        const categories = await this.getRelatedCategories();
         this.setState({ expression, mnemonics, categories, loaded: true });
     }
 

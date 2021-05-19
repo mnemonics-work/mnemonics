@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Typography, List, PageHeader, Layout, Spin, Row, Col } from "antd";
 
-import { ExpressionsApi, MnemonicsApi } from "global/api";
+import { AnalyticsApi, MnemonicsAppApi } from "global/api";
 import {
     Mnemonic,
-    MnemonicsReadRequest,
+    ApiMnemonicsReadRequest,
     Expression,
-    ExpressionsReadRequest,
+    ApiExpressionsReadRequest,
     Category,
-    ExpressionsRelatedCategoriesRequest,
+    ApiExpressionsRelatedCategoriesRequest,
+    Event,
+    AnalyticsEventCreateRequest,
+    EventEventTypeEnum,
 } from "global/generated-api";
 
 import { Labels, LabelType } from "../Labels";
@@ -29,6 +32,12 @@ interface RouteParams {
     mnemonicId: string;
 }
 
+interface MnemonicInfo {
+    mnemonicId: string;
+    pagePath: string;
+    pageFullPath: string;
+}
+
 export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
     state: MnemonicPageState = {
         mnemonic: undefined,
@@ -38,8 +47,8 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
     };
 
     getMnemonicDataFromApi(mnemonicId: number): void {
-        const requestParams: MnemonicsReadRequest = { id: mnemonicId };
-        MnemonicsApi.mnemonicsRead(requestParams)
+        const requestParams: ApiMnemonicsReadRequest = { id: mnemonicId };
+        MnemonicsAppApi.apiMnemonicsRead(requestParams)
             .then((data) => {
                 this.setState({ mnemonic: data, loaded: true });
                 if (this.state.mnemonic?.expression) {
@@ -50,19 +59,31 @@ export class MnemonicPage extends Component<RouteComponentProps<RouteParams>> {
     }
 
     componentDidMount(): void {
+        this.logEvent();
         this.getMnemonicDataFromApi(+this.props.match.params.mnemonicId);
     }
 
+    logEvent(): void {
+        const eventData: MnemonicInfo = {
+            mnemonicId: this.props.match.params.mnemonicId,
+            pagePath: this.props.location.pathname,
+            pageFullPath: window.location.href,
+        };
+        const requestEvent: Event = { eventType: EventEventTypeEnum.Mv, data: eventData, datetime: new Date() };
+        const requestParams: AnalyticsEventCreateRequest = { data: requestEvent };
+        AnalyticsApi.analyticsEventCreate(requestParams);
+    }
+
     getRelatedCategories(expressionId: number): void {
-        const requestParams: ExpressionsRelatedCategoriesRequest = { id: expressionId };
-        ExpressionsApi.expressionsRelatedCategories(requestParams).then((data) => {
+        const requestParams: ApiExpressionsRelatedCategoriesRequest = { id: expressionId };
+        MnemonicsAppApi.apiExpressionsRelatedCategories(requestParams).then((data) => {
             this.setState({ categories: data });
         });
     }
 
     getExpression(expressionId: number): void {
-        const requestParams: ExpressionsReadRequest = { id: expressionId };
-        ExpressionsApi.expressionsRead(requestParams).then((data) => {
+        const requestParams: ApiExpressionsReadRequest = { id: expressionId };
+        MnemonicsAppApi.apiExpressionsRead(requestParams).then((data) => {
             this.setState({
                 mnemonic: this.state.mnemonic,
                 loaded: this.state.loaded,
