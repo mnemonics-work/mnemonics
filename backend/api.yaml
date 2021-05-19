@@ -6,7 +6,7 @@ info:
 host: 127.0.0.1:8000
 schemes:
   - http
-basePath: /api
+basePath: /
 consumes:
   - application/json
 produces:
@@ -17,9 +17,27 @@ securityDefinitions:
 security:
   - Basic: []
 paths:
-  /categories:
+  /analytics/event:
+    post:
+      operationId: analytics_event_create
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Event'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Event'
+      tags:
+        - analytics
+    parameters: []
+  /api/categories:
     get:
-      operationId: categories_list
+      operationId: api_categories_list
       description: ''
       parameters: []
       responses:
@@ -30,11 +48,11 @@ paths:
             items:
               $ref: '#/definitions/Category'
       tags:
-        - categories
+        - api
     parameters: []
-  /categories/{id}:
+  /api/categories/{id}:
     get:
-      operationId: categories_read
+      operationId: api_categories_read
       description: ''
       parameters: []
       responses:
@@ -43,16 +61,16 @@ paths:
           schema:
             $ref: '#/definitions/Category'
       tags:
-        - categories
+        - api
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this category.
         required: true
         type: integer
-  /expressions:
+  /api/expressions:
     get:
-      operationId: expressions_list
+      operationId: api_expressions_list
       description: ''
       parameters: []
       responses:
@@ -63,9 +81,9 @@ paths:
             items:
               $ref: '#/definitions/Expression'
       tags:
-        - expressions
+        - api
     post:
-      operationId: expressions_create
+      operationId: api_expressions_create
       description: ''
       parameters:
         - name: data
@@ -79,11 +97,11 @@ paths:
           schema:
             $ref: '#/definitions/Expression'
       tags:
-        - expressions
+        - api
     parameters: []
-  /expressions/{id}:
+  /api/expressions/{id}:
     get:
-      operationId: expressions_read
+      operationId: api_expressions_read
       description: ''
       parameters: []
       responses:
@@ -92,9 +110,9 @@ paths:
           schema:
             $ref: '#/definitions/Expression'
       tags:
-        - expressions
+        - api
     put:
-      operationId: expressions_update
+      operationId: api_expressions_update
       description: ''
       parameters:
         - name: data
@@ -108,9 +126,9 @@ paths:
           schema:
             $ref: '#/definitions/Expression'
       tags:
-        - expressions
+        - api
     patch:
-      operationId: expressions_partial_update
+      operationId: api_expressions_partial_update
       description: ''
       parameters:
         - name: data
@@ -124,25 +142,25 @@ paths:
           schema:
             $ref: '#/definitions/Expression'
       tags:
-        - expressions
+        - api
     delete:
-      operationId: expressions_delete
+      operationId: api_expressions_delete
       description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - expressions
+        - api
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this expression.
         required: true
         type: integer
-  /expressions/{id}/related_categories:
+  /api/expressions/{id}/related_categories:
     get:
-      operationId: expressions_related_categories
+      operationId: api_expressions_related_categories
       description: ''
       parameters: []
       responses:
@@ -153,16 +171,16 @@ paths:
             items:
               $ref: '#/definitions/Category'
       tags:
-        - expressions
+        - api
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this expression.
         required: true
         type: integer
-  /mnemonicTypes:
+  /api/mnemonicTypes:
     get:
-      operationId: mnemonicTypes_list
+      operationId: api_mnemonicTypes_list
       description: ''
       parameters: []
       responses:
@@ -173,9 +191,9 @@ paths:
             items:
               $ref: '#/definitions/MnemonicType'
       tags:
-        - mnemonicTypes
+        - api
     post:
-      operationId: mnemonicTypes_create
+      operationId: api_mnemonicTypes_create
       description: ''
       parameters:
         - name: data
@@ -189,11 +207,11 @@ paths:
           schema:
             $ref: '#/definitions/MnemonicType'
       tags:
-        - mnemonicTypes
+        - api
     parameters: []
-  /mnemonicTypes/{id}:
+  /api/mnemonicTypes/{id}:
     get:
-      operationId: mnemonicTypes_read
+      operationId: api_mnemonicTypes_read
       description: ''
       parameters: []
       responses:
@@ -202,9 +220,9 @@ paths:
           schema:
             $ref: '#/definitions/MnemonicType'
       tags:
-        - mnemonicTypes
+        - api
     put:
-      operationId: mnemonicTypes_update
+      operationId: api_mnemonicTypes_update
       description: ''
       parameters:
         - name: data
@@ -218,9 +236,9 @@ paths:
           schema:
             $ref: '#/definitions/MnemonicType'
       tags:
-        - mnemonicTypes
+        - api
     patch:
-      operationId: mnemonicTypes_partial_update
+      operationId: api_mnemonicTypes_partial_update
       description: ''
       parameters:
         - name: data
@@ -234,25 +252,25 @@ paths:
           schema:
             $ref: '#/definitions/MnemonicType'
       tags:
-        - mnemonicTypes
+        - api
     delete:
-      operationId: mnemonicTypes_delete
+      operationId: api_mnemonicTypes_delete
       description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - mnemonicTypes
+        - api
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this mnemonic type.
         required: true
         type: integer
-  /mnemonics:
+  /api/mnemonics:
     get:
-      operationId: mnemonics_list
+      operationId: api_mnemonics_list
       description: ''
       parameters:
         - name: search
@@ -312,9 +330,9 @@ paths:
                 items:
                   $ref: '#/definitions/Mnemonic'
       tags:
-        - mnemonics
+        - api
     post:
-      operationId: mnemonics_create
+      operationId: api_mnemonics_create
       description: ''
       parameters:
         - name: data
@@ -328,11 +346,11 @@ paths:
           schema:
             $ref: '#/definitions/Mnemonic'
       tags:
-        - mnemonics
+        - api
     parameters: []
-  /mnemonics/{id}:
+  /api/mnemonics/{id}:
     get:
-      operationId: mnemonics_read
+      operationId: api_mnemonics_read
       description: ''
       parameters: []
       responses:
@@ -341,9 +359,9 @@ paths:
           schema:
             $ref: '#/definitions/Mnemonic'
       tags:
-        - mnemonics
+        - api
     put:
-      operationId: mnemonics_update
+      operationId: api_mnemonics_update
       description: ''
       parameters:
         - name: data
@@ -357,9 +375,9 @@ paths:
           schema:
             $ref: '#/definitions/Mnemonic'
       tags:
-        - mnemonics
+        - api
     patch:
-      operationId: mnemonics_partial_update
+      operationId: api_mnemonics_partial_update
       description: ''
       parameters:
         - name: data
@@ -373,25 +391,25 @@ paths:
           schema:
             $ref: '#/definitions/Mnemonic'
       tags:
-        - mnemonics
+        - api
     delete:
-      operationId: mnemonics_delete
+      operationId: api_mnemonics_delete
       description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - mnemonics
+        - api
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this mnemonic.
         required: true
         type: integer
-  /tags:
+  /api/tags:
     get:
-      operationId: tags_list
+      operationId: api_tags_list
       description: ''
       parameters: []
       responses:
@@ -402,11 +420,11 @@ paths:
             items:
               $ref: '#/definitions/Tag'
       tags:
-        - tags
+        - api
     parameters: []
-  /tags/{id}:
+  /api/tags/{id}:
     get:
-      operationId: tags_read
+      operationId: api_tags_read
       description: ''
       parameters: []
       responses:
@@ -415,7 +433,7 @@ paths:
           schema:
             $ref: '#/definitions/Tag'
       tags:
-        - tags
+        - api
     parameters:
       - name: id
         in: path
@@ -423,6 +441,25 @@ paths:
         required: true
         type: integer
 definitions:
+  Event:
+    required:
+      - datetime
+      - eventType
+    type: object
+    properties:
+      datetime:
+        title: Datetime
+        type: string
+        format: date-time
+      data:
+        title: Data
+        type: object
+        x-nullable: true
+      eventType:
+        title: EventType
+        type: string
+        enum:
+          - MV
   Category:
     required:
       - title

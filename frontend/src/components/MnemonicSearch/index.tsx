@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Card, Checkbox, Divider, Empty, Input, Pagination, Spin } from "antd";
 
-import { MnemonicsApi, MnemonicTypesApi, TagsApi } from "global/api";
-import { Mnemonic, MnemonicsListRequest, MnemonicType, Tag } from "global/generated-api";
+import { MnemonicsAppApi } from "global/api";
+import { Mnemonic, ApiMnemonicsListRequest, MnemonicType, Tag } from "global/generated-api";
 
 import { MnemonicsCard } from "../MnemonicCard";
 import "./styles.scss";
@@ -54,14 +54,14 @@ export class MnemonicSearch extends Component<RouteComponentProps<RouteParams>, 
 
     async searchAndFilter(searchText: string, tags: number[], mnemonicTypes: number[], page: number): Promise<void> {
         this.setState({ dataRetrieved: false });
-        const requestParameters: MnemonicsListRequest = {
+        const requestParameters: ApiMnemonicsListRequest = {
             search: searchText,
             tags: tags,
             types: mnemonicTypes,
             offset: this.getOffset(page, this.PAGE_SIZE),
             limit: this.PAGE_SIZE,
         };
-        MnemonicsApi.mnemonicsList(requestParameters).then((data) => {
+        MnemonicsAppApi.apiMnemonicsList(requestParameters).then((data) => {
             this.total_cards = data.count;
             this.setState({ mnemonics: data.results, dataRetrieved: true, current: page });
         });
@@ -79,11 +79,11 @@ export class MnemonicSearch extends Component<RouteComponentProps<RouteParams>, 
     };
 
     async getAllTagsFromApi(): Promise<Tag[]> {
-        return await TagsApi.tagsList();
+        return await MnemonicsAppApi.apiTagsList();
     }
 
     async getAllMnemonicTypesFromApi(): Promise<MnemonicType[]> {
-        return await MnemonicTypesApi.mnemonicTypesList();
+        return await MnemonicsAppApi.apiMnemonicTypesList();
     }
 
     async componentDidMount(): Promise<void> {
