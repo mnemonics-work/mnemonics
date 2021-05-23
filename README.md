@@ -1,4 +1,7 @@
 # Mnemonics work
+"Mnemonics work" is a web project created to display a collection of mnemonics, to provide an aid to students and professionals that may have difficulties to learn and master a topic.
+
+It is an open initiative, aiming to welcome contributions.
 
 ## Quick development setup
 ### Frontend:
