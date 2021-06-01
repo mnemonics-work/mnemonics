@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {RouteComponentProps} from "react-router-dom";
-import {Col, Layout, List, PageHeader, Pagination, Row, Spin, Typography} from "antd";
+import React, { Component } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { Col, Layout, List, PageHeader, Pagination, Row, Spin, Typography } from "antd";
 
-import {MnemonicsAppApi} from "global/api";
+import { MnemonicsAppApi } from "global/api";
 import {
     ApiExpressionsReadRequest,
     ApiExpressionsRelatedCategoriesRequest,
@@ -12,8 +12,8 @@ import {
     Mnemonic,
 } from "global/generated-api";
 
-import {MnemonicsCard} from "../MnemonicCard";
-import {Labels, LabelType} from "../Labels";
+import { MnemonicsCard } from "../MnemonicCard";
+import { Labels, LabelType } from "../Labels";
 import "./styles.scss";
 
 const { Title, Paragraph } = Typography;

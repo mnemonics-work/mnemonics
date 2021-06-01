@@ -39,7 +39,18 @@ paths:
     get:
       operationId: api_categories_list
       description: ''
-      parameters: []
+      parameters:
+        - name: ids
+          in: query
+          description: Categories ids separated by commas
+          type: array
+          items:
+            type: integer
+        - name: parent_topic_is_null
+          in: query
+          description: ''
+          required: false
+          type: string
       responses:
         '200':
           description: ''
@@ -60,6 +71,26 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Category'
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this category.
+        required: true
+        type: integer
+  /api/categories/{id}/related_expressions:
+    get:
+      operationId: api_categories_related_expressions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Expression'
       tags:
         - api
     parameters:

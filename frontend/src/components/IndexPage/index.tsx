@@ -5,6 +5,7 @@ import { Input, Space } from "antd";
 import { CardList } from "../CardList";
 import history from "../../history";
 import "./styles.scss";
+import { NavigationMenu } from "../NavigationMenu";
 
 const { Title, Paragraph, Text } = Typography;
 const { Header, Content, Sider, Footer } = Layout;
@@ -23,7 +24,10 @@ export class IndexPage extends Component<unknown> {
                     <Text className="logo-text">Mnemonics work!</Text>
                 </Header>
                 <Layout>
-                    <Sider width={200}>Navigation</Sider>
+                    <Sider theme="light" width={200} className="navigation-sider">
+                        <h3> Categories </h3>
+                        <NavigationMenu />
+                    </Sider>
                     <Layout>
                         <Content className="site-background layout-content">
                             <div className="site-background center-content">

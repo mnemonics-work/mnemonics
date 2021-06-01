@@ -35,7 +35,16 @@ import {
     TagToJSON,
 } from '../models';
 
+export interface ApiCategoriesListRequest {
+    ids?: Array<number>;
+    parentTopicIsNull?: string;
+}
+
 export interface ApiCategoriesReadRequest {
+    id: number;
+}
+
+export interface ApiCategoriesRelatedExpressionsRequest {
     id: number;
 }
 
@@ -129,8 +138,16 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiCategoriesListRaw(): Promise<runtime.ApiResponse<Array<Category>>> {
+    async apiCategoriesListRaw(requestParameters: ApiCategoriesListRequest): Promise<runtime.ApiResponse<Array<Category>>> {
         const queryParameters: any = {};
+
+        if (requestParameters.ids) {
+            queryParameters['ids'] = requestParameters.ids.join(runtime.COLLECTION_FORMATS["csv"]);
+        }
+
+        if (requestParameters.parentTopicIsNull !== undefined) {
+            queryParameters['parent_topic_is_null'] = requestParameters.parentTopicIsNull;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -149,8 +166,8 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiCategoriesList(): Promise<Array<Category>> {
-        const response = await this.apiCategoriesListRaw();
+    async apiCategoriesList(requestParameters: ApiCategoriesListRequest): Promise<Array<Category>> {
+        const response = await this.apiCategoriesListRaw(requestParameters);
         return await response.value();
     }
 
@@ -182,6 +199,37 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async apiCategoriesRead(requestParameters: ApiCategoriesReadRequest): Promise<Category> {
         const response = await this.apiCategoriesReadRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiCategoriesRelatedExpressionsRaw(requestParameters: ApiCategoriesRelatedExpressionsRequest): Promise<runtime.ApiResponse<Array<Expression>>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiCategoriesRelatedExpressions.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        const response = await this.request({
+            path: `/api/categories/{id}/related_expressions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ExpressionFromJSON));
+    }
+
+    /**
+     */
+    async apiCategoriesRelatedExpressions(requestParameters: ApiCategoriesRelatedExpressionsRequest): Promise<Array<Expression>> {
+        const response = await this.apiCategoriesRelatedExpressionsRaw(requestParameters);
         return await response.value();
     }
 
