@@ -1,4 +1,8 @@
-from django_filters.rest_framework import FilterSet, ModelMultipleChoiceFilter
+from django_filters.rest_framework import (
+    BooleanFilter,
+    FilterSet,
+    ModelMultipleChoiceFilter,
+)
 from django_filters.fields import CSVWidget
 from mnemonics.models import MnemonicType, Tag
 from django_filters import Filter
@@ -26,3 +30,10 @@ class MnemonicsFilter(FilterSet):
         field_name="types", queryset=MnemonicType.objects.all(), widget=CSVWidget
     )
     ids = ListFilter(field_name="id", lookup_expr="in")
+
+
+class CategoriesFilter(FilterSet):
+    ids = ListFilter(field_name="id", lookup_expr="in")
+    parent_topic_is_null = BooleanFilter(
+        field_name="parent_topic", lookup_expr="isnull"
+    )
