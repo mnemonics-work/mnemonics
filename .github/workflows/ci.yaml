@@ -1,0 +1,35 @@
+name: Django CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  check-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+    - name: run backend
+      run: |
+        cd backend
+        pip install -r requirements.txt
+        python manage.py test
+  check-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Cache dependency
+      uses: actions/cache@v2
+    - name: install yarn
+      run: npm install -g yarn
+    - name: run frontend
+      run: |
+        cd frontend
+        yarn install
+        yarn run lint
+        npm run build
+
