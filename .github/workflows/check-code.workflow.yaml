@@ -1,7 +1,7 @@
-name: Django CI/CD Workflow
+name: Mnemonics Code Checking
 
 on:
-  push:
+  pull_request:
     branches:
       - master
 jobs:
@@ -10,7 +10,6 @@ jobs:
     steps:
     - uses: actions/setup-python@v2
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
     - name: run backend
       run: |
         cd backend
@@ -20,16 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-node@v2
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Cache dependency
-      uses: actions/cache@v2
-    - name: install yarn
-      run: npm install -g yarn
+    - uses: actions/checkout@v2
+    - run: yarn policies set-version 1.22.5
     - name: run frontend
       run: |
         cd frontend
         yarn install
         yarn run lint
-        npm run build
 
