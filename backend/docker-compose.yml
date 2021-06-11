@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=mnemonics_db
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=G1qux4E0XvsaxM
+
+  web:
+    build: .
+    container_name: mnemonics_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/home/backend
+    environment:
+      - DATABASE_URL=postgresql://django:G1qux4E0XvsaxM@db/mnemonics_db
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    restart: always
+
+volumes:
+  postgres_data:

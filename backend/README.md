@@ -28,5 +28,19 @@
 
 - For continuous deployment(CD), make sure to have the variables `HEROKU_APP_STAGING` and `HEROKU_API_KEY` in the Gitlab project CI/CD settings
 
+## Run with Docker compose
+
+To run with docker you need installed docker and docker-compose. You can run docker images with
+the next commands.
+
+```sh
+$ make build  # Build docker image
+$ make up  # add mode=detach for detached mode
+
+# Open other window and run
+$ make migrate  # Apply migrations to DB
+$ make createsuperuser  # Create new admin super user
+```
+
 ## Models:
 ![Models graphical representation](models.png)

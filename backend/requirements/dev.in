@@ -1,4 +1,4 @@
--r prod-requirements.in
+-r prod.in
 black
 flake8
 pygraphviz

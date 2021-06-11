@@ -22,15 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "20@g7@9^wfswz9(%2!5)k+=yv)u@uy(_@e10bu33fy+1dcvt3t"
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY", "20@g7@9^wfswz9(%2!5)k+=yv)u@uy(_@e10bu33fy+1dcvt3t"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [
-    "mnemonics-work-staging.herokuapp.com",
-    # "127.0.0.1",  # For local development
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 
 # Application definition
@@ -71,12 +70,9 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    # For local development
-    # "http://localhost:8080",
-    # Staging server
-    "http://mnemonics-stage.com.s3-website.us-east-2.amazonaws.com",
-]
+CORS_ORIGIN_WHITELIST = os.environ.get("CORS_ORIGIN_WHITELIST", "localhost:8000").split(
+    ","
+)
 
 ROOT_URLCONF = "backend.urls"
 
@@ -151,3 +147,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
