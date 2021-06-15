@@ -1,0 +1,4 @@
+pip-tools
+scrapy
+pymongo[srv]
+black
