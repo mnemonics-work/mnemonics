@@ -6,9 +6,10 @@ import { CardList } from "../CardList";
 import history from "../../history";
 import "./styles.scss";
 import { NavigationMenu } from "../NavigationMenu";
+import { CustomHeader } from "../Header";
 
-const { Title, Paragraph, Text } = Typography;
-const { Header, Content, Sider, Footer } = Layout;
+const { Title, Paragraph } = Typography;
+const { Content, Sider, Footer } = Layout;
 const { Search } = Input;
 
 export class IndexPage extends Component<unknown> {
@@ -19,10 +20,7 @@ export class IndexPage extends Component<unknown> {
     render(): JSX.Element {
         return (
             <Layout>
-                <Header>
-                    <div className="logo" />
-                    <Text className="logo-text">Mnemonics work!</Text>
-                </Header>
+                <CustomHeader />
                 <Layout>
                     <Sider theme="light" width={200} className="navigation-sider">
                         <h3> Categories </h3>

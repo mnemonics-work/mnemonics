@@ -7,3 +7,4 @@ psycopg2
 django-cors-headers
 dj-database-url
 gunicorn
+requests-oauthlib

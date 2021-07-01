@@ -7,6 +7,8 @@ import { MnemonicSearch } from "../components/MnemonicSearch";
 import { ExpressionPage } from "../components/ExpressionPage";
 import { IndexPage } from "../components/IndexPage";
 import { CategoryPage } from "../components/CategoryPage";
+import { LoginPage } from "../components/LoginPage";
+import { SignUpPage } from "../components/SignUpPage";
 import history from "../history";
 
 export class MainRoutes extends Component<unknown, unknown> {
@@ -15,6 +17,8 @@ export class MainRoutes extends Component<unknown, unknown> {
             <Router history={history}>
                 <Switch>
                     <Route path="/card-list" component={CardList} />
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/sign-up" component={SignUpPage} />
                     <Route path="/mnemonic/:mnemonicId" component={MnemonicPage} exact={true} />
                     <Route path="/expression/:expressionId" component={ExpressionPage} exact={true} />
                     <Route path="/category/:categoryId" component={CategoryPage} />

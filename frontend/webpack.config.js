@@ -36,6 +36,8 @@ const config = {
         new webpack.DefinePlugin({
             'process.env': {
                 'MNEMONICS_BASE_URL': JSON.stringify(process.env.MNEMONICS_BASE_URL),
+                'MNEMONICS_WEB_URL': JSON.stringify(process.env.MNEMONICS_WEB_URL),
+                'GOOGLE_APP_ID': JSON.stringify(process.env.GOOGLE_APP_ID),
                 'PORT': JSON.stringify(process.env.PORT),
             }
         })

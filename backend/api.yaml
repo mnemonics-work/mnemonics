@@ -35,6 +35,60 @@ paths:
       tags:
         - analytics
     parameters: []
+  /api/auth/google:
+    post:
+      operationId: api_auth_google
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GoogleSocialAuth'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Token'
+      tags:
+        - api
+    parameters: []
+  /api/auth/login:
+    post:
+      operationId: api_auth_login
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AuthToken'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Token'
+      tags:
+        - api
+    parameters: []
+  /api/auth/register:
+    post:
+      operationId: api_auth_register
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Register'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Token'
+      tags:
+        - api
+    parameters: []
   /api/categories:
     get:
       operationId: api_categories_list
@@ -491,6 +545,82 @@ definitions:
         type: string
         enum:
           - MV
+  GoogleSocialAuth:
+    required:
+      - code
+      - redirect_uri
+    type: object
+    properties:
+      code:
+        title: Code
+        type: string
+        maxLength: 256
+        minLength: 1
+      redirect_uri:
+        title: Redirect uri
+        type: string
+        maxLength: 256
+        minLength: 1
+  Token:
+    required:
+      - key
+    type: object
+    properties:
+      key:
+        title: Key
+        type: string
+        maxLength: 40
+        minLength: 1
+  AuthToken:
+    required:
+      - username
+      - password
+    type: object
+    properties:
+      username:
+        title: Username
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+      token:
+        title: Token
+        type: string
+        readOnly: true
+        minLength: 1
+  Register:
+    required:
+      - username
+      - password
+      - fullname
+      - email
+    type: object
+    properties:
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      fullname:
+        title: Fullname
+        type: string
+        maxLength: 256
+        minLength: 1
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
   Category:
     required:
       - title

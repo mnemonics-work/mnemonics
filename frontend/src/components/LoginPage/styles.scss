@@ -1,0 +1,36 @@
+.login-container {
+    margin: 30px auto;
+    min-width: 280px;
+    width: 442px;
+
+    .login-button {
+        height: 36px;
+        font-weight: 500;
+        margin: 10px auto;
+    }
+
+    .inputs {
+        margin: 30px auto;
+    }
+
+    .google-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        div {
+            display: flex;
+            width: 150px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        img {
+            height: 20px;
+        }
+    }
+
+    .sign-up-link {
+        margin-top: 20px;
+    }
+}
