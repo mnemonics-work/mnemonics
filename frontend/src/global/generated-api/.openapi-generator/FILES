@@ -3,12 +3,16 @@ apis/AnalyticsApi.ts
 apis/ApiApi.ts
 apis/index.ts
 index.ts
+models/AuthToken.ts
 models/Category.ts
 models/Event.ts
 models/Expression.ts
+models/GoogleSocialAuth.ts
 models/InlineResponse200.ts
 models/Mnemonic.ts
 models/MnemonicType.ts
+models/Register.ts
 models/Tag.ts
+models/Token.ts
 models/index.ts
 runtime.ts

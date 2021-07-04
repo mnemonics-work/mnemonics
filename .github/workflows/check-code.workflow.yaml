@@ -7,14 +7,26 @@ on:
 jobs:
   check-backend:
     runs-on: ubuntu-latest
+    environment: CI/CD
     steps:
     - uses: actions/setup-python@v2
     - uses: actions/checkout@v2
     - name: run backend
+      env:
+        DATABASE_URL: postgresql://django:G1qux4E0XvsaxM@127.0.0.1/mnemonics_db
       run: |
         cd backend
         pip install -r requirements.txt
         python manage.py test
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: mnemonics_db
+          POSTGRES_USER: django
+          POSTGRES_PASSWORD: G1qux4E0XvsaxM
+        ports:
+          - 5432:5432
   check-frontend:
     runs-on: ubuntu-latest
     steps:

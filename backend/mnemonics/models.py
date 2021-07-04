@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 
@@ -45,3 +46,13 @@ class Category(models.Model):
 class MnemonicType(models.Model):
     label = models.CharField(max_length=256)
     mnemonics = models.ManyToManyField(Mnemonic, related_name="types", blank=True)
+
+
+class Profile(models.Model):
+    fullname = models.CharField(max_length=256)
+    email = models.CharField(max_length=256)
+    google_id = models.CharField(null=True, blank=True, max_length=128)
+    user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{} - {}".format(self.user, self.fullname)

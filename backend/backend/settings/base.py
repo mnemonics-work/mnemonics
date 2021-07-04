@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_yasg",
     "mnemonics",
     "analytics",
@@ -153,3 +154,8 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+
+# Google OAuth2
+GOOGLE_APP_ID = os.getenv("GOOGLE_APP_ID")
+GOOGLE_APP_SECRET = os.getenv("GOOGLE_APP_SECRET")

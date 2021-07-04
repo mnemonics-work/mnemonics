@@ -15,12 +15,18 @@
 
 import * as runtime from '../runtime';
 import {
+    AuthToken,
+    AuthTokenFromJSON,
+    AuthTokenToJSON,
     Category,
     CategoryFromJSON,
     CategoryToJSON,
     Expression,
     ExpressionFromJSON,
     ExpressionToJSON,
+    GoogleSocialAuth,
+    GoogleSocialAuthFromJSON,
+    GoogleSocialAuthToJSON,
     InlineResponse200,
     InlineResponse200FromJSON,
     InlineResponse200ToJSON,
@@ -30,10 +36,28 @@ import {
     MnemonicType,
     MnemonicTypeFromJSON,
     MnemonicTypeToJSON,
+    Register,
+    RegisterFromJSON,
+    RegisterToJSON,
     Tag,
     TagFromJSON,
     TagToJSON,
+    Token,
+    TokenFromJSON,
+    TokenToJSON,
 } from '../models';
+
+export interface ApiAuthGoogleRequest {
+    data: GoogleSocialAuth;
+}
+
+export interface ApiAuthLoginRequest {
+    data: AuthToken;
+}
+
+export interface ApiAuthRegisterRequest {
+    data: Register;
+}
 
 export interface ApiCategoriesListRequest {
     ids?: Array<number>;
@@ -135,6 +159,108 @@ export interface ApiTagsReadRequest {
  * 
  */
 export class ApiApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiAuthGoogleRaw(requestParameters: ApiAuthGoogleRequest): Promise<runtime.ApiResponse<Token>> {
+        if (requestParameters.data === null || requestParameters.data === undefined) {
+            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiAuthGoogle.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        const response = await this.request({
+            path: `/api/auth/google`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GoogleSocialAuthToJSON(requestParameters.data),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAuthGoogle(requestParameters: ApiAuthGoogleRequest): Promise<Token> {
+        const response = await this.apiAuthGoogleRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAuthLoginRaw(requestParameters: ApiAuthLoginRequest): Promise<runtime.ApiResponse<Token>> {
+        if (requestParameters.data === null || requestParameters.data === undefined) {
+            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiAuthLogin.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        const response = await this.request({
+            path: `/api/auth/login`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AuthTokenToJSON(requestParameters.data),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAuthLogin(requestParameters: ApiAuthLoginRequest): Promise<Token> {
+        const response = await this.apiAuthLoginRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiAuthRegisterRaw(requestParameters: ApiAuthRegisterRequest): Promise<runtime.ApiResponse<Token>> {
+        if (requestParameters.data === null || requestParameters.data === undefined) {
+            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiAuthRegister.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        const response = await this.request({
+            path: `/api/auth/register`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RegisterToJSON(requestParameters.data),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiAuthRegister(requestParameters: ApiAuthRegisterRequest): Promise<Token> {
+        const response = await this.apiAuthRegisterRaw(requestParameters);
+        return await response.value();
+    }
 
     /**
      */
