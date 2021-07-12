@@ -36,7 +36,7 @@ export class CustomHeader extends Component<unknown> {
     render(): JSX.Element {
         return (
             <Header>
-                <Link to="">
+                <Link to="/home">
                     <div className="logo"></div>
                 </Link>
                 {this.login()}

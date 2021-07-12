@@ -40,7 +40,7 @@ export class LoginPage extends Component<LoginProps> {
                 (data: { key: string }) => {
                     const token = data.key;
                     AuthService.setAuthToken(token);
-                    history.push("/");
+                    history.push("/home");
                 },
                 (error: unknown) => {
                     alert("Check your credentials");
@@ -67,7 +67,7 @@ export class LoginPage extends Component<LoginProps> {
             (data: { key: string }) => {
                 const token = data.key;
                 AuthService.setAuthToken(token);
-                history.push("/");
+                history.push("/home");
             },
             (error: unknown) => {
                 alert("Check your credentials");

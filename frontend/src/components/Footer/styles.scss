@@ -1,0 +1,18 @@
+.footer-link {
+    color: #000000;
+    margin: auto 10px;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.github-icon {
+    font-size: 20px;
+}
