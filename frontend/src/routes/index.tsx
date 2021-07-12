@@ -9,6 +9,7 @@ import { IndexPage } from "../components/IndexPage";
 import { CategoryPage } from "../components/CategoryPage";
 import { LoginPage } from "../components/LoginPage";
 import { SignUpPage } from "../components/SignUpPage";
+import { ComingSoonPage } from "../components/ComingSoonPage";
 import history from "../history";
 
 export class MainRoutes extends Component<unknown, unknown> {
@@ -23,7 +24,8 @@ export class MainRoutes extends Component<unknown, unknown> {
                     <Route path="/expression/:expressionId" component={ExpressionPage} exact={true} />
                     <Route path="/category/:categoryId" component={CategoryPage} />
                     <Route path="/search/:query?" component={MnemonicSearch} />
-                    <Route path="/" component={IndexPage} />
+                    <Route path="/home" component={IndexPage}></Route>
+                    <Route path="/" component={ComingSoonPage} />
                 </Switch>
             </Router>
         );

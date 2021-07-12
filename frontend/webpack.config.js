@@ -26,6 +26,7 @@ const config = {
             {test: /\.css$/, use: ["style-loader", "css-loader"]},
             {test: /\.tsx?$/, exclude: /node_modules/, loader: "babel-loader"},
             {test: /\.tsx?$/, exclude: /node_modules/, loader: "ts-loader"},
+            {test: /\.(jpg|jpeg|png)?$/, exclude: /node_modules/, loader: "file-loader"},
             {enforce: "pre", test: /\.js$/, loader: "source-map-loader"}
         ],
     },
@@ -38,6 +39,9 @@ const config = {
                 'MNEMONICS_BASE_URL': JSON.stringify(process.env.MNEMONICS_BASE_URL),
                 'MNEMONICS_WEB_URL': JSON.stringify(process.env.MNEMONICS_WEB_URL),
                 'GOOGLE_APP_ID': JSON.stringify(process.env.GOOGLE_APP_ID),
+                'EMAILJS_TEMPLATE_ID': JSON.stringify(process.env.EMAILJS_TEMPLATE_ID),
+                'EMAILJS_SERVICE_ID': JSON.stringify(process.env.EMAILJS_SERVICE_ID),
+                'EMAILJS_USER_ID': JSON.stringify(process.env.EMAILJS_USER_ID),
                 'PORT': JSON.stringify(process.env.PORT),
             }
         })

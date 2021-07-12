@@ -7,9 +7,10 @@ import history from "../../history";
 import "./styles.scss";
 import { NavigationMenu } from "../NavigationMenu";
 import { CustomHeader } from "../Header";
+import { CustomFooter } from "../Footer";
 
 const { Title, Paragraph } = Typography;
-const { Content, Sider, Footer } = Layout;
+const { Content, Sider } = Layout;
 const { Search } = Input;
 
 export class IndexPage extends Component<unknown> {
@@ -60,12 +61,7 @@ export class IndexPage extends Component<unknown> {
                         </Content>
                     </Layout>
                 </Layout>
-                <Footer className="center-content">
-                    <Space direction="vertical">
-                        <div>Mnemonics work ©2021 Created by Mnemonics work</div>
-                        <a href="#"> Terms of service </a>
-                    </Space>
-                </Footer>
+                <CustomFooter />
             </Layout>
         );
     }

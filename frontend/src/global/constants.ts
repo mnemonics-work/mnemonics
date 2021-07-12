@@ -11,3 +11,6 @@ export const GOOGLE_LINK =
     GOOGLE_APP_ID +
     "&redirect_uri=" +
     GOOGLE_REDIRECT_URI;
+export const EMAILJS_TEMPLATE_ID = environmentVariables.EMAILJS_TEMPLATE_ID;
+export const EMAILJS_SERVICE_ID = environmentVariables.EMAILJS_SERVICE_ID;
+export const EMAILJS_USER_ID = environmentVariables.EMAILJS_USER_ID;

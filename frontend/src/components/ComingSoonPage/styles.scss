@@ -1,0 +1,79 @@
+.logo-mnemonics {
+    margin: 50px auto 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        margin-left: 10px;
+    }
+
+    img {
+        width: 100px;
+        border-radius: 15px;
+        margin-right: 10px;
+    }
+}
+
+.title-coming-soon {
+    text-align: center;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.row-content {
+    width: 90%;
+    max-width: 800px;
+    margin: 50px auto;
+}
+
+.body-coming-soon {
+    min-height: 750px;
+    height: 100vh;
+}
+
+.content-coming-soon {
+    height: 100%;
+}
+
+.mnemonics-email {
+    margin: 10px 0px;
+}
+
+.email-input {
+    width: calc(100% - 64.7px);
+}
+
+.mnemonics-check-staging {
+    margin-bottom: 30px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.home-button {
+    margin: 0px calc(50% - 96px);
+}
+
+@media (max-width: 992px) {
+    .logo-mnemonics {
+        margin: 30px auto 0px;
+        flex-direction: column;
+
+        span {
+            margin-top: 10px;
+        }
+    }
+
+    .row-content {
+        margin: 30px auto 50px;
+    }
+}
