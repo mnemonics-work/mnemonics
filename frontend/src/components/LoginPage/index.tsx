@@ -10,6 +10,7 @@ import { CustomHeader } from "../Header";
 import { MnemonicsAppApi } from "global/api";
 import { ApiAuthLoginRequest, ApiAuthGoogleRequest } from "global/generated-api";
 import { GOOGLE_REDIRECT_URI, GOOGLE_LINK } from "global/constants";
+import { GoogleOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -23,12 +24,6 @@ export class LoginPage extends Component<LoginProps> {
         username: "",
         password: "",
     };
-
-    constructor(props: LoginProps) {
-        super(props);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
     componentDidMount(): void {
         const queryParams = new URLSearchParams(this.props.location.search);
@@ -50,7 +45,7 @@ export class LoginPage extends Component<LoginProps> {
         }
     }
 
-    handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const {
             target: { value, name },
         } = event;
@@ -58,9 +53,9 @@ export class LoginPage extends Component<LoginProps> {
         this.setState({
             [name]: value,
         });
-    }
+    };
 
-    handleSubmit(event: React.ChangeEvent): void {
+    handleSubmit = (): void => {
         const requestData = { username: this.state.username, password: this.state.password };
         const request: ApiAuthLoginRequest = { data: requestData };
         MnemonicsAppApi.apiAuthLogin(request).then(
@@ -74,8 +69,7 @@ export class LoginPage extends Component<LoginProps> {
                 console.error(error);
             },
         );
-        event.preventDefault();
-    }
+    };
 
     render(): JSX.Element {
         return (
@@ -104,8 +98,7 @@ export class LoginPage extends Component<LoginProps> {
                                             name="password"
                                             rules={[{ required: true, message: "Please input your password" }]}
                                         >
-                                            <Input
-                                                type="password"
+                                            <Input.Password
                                                 name="password"
                                                 value={this.state.password}
                                                 onChange={this.handleInputChange}
@@ -118,13 +111,13 @@ export class LoginPage extends Component<LoginProps> {
                                     <a href={GOOGLE_LINK}>
                                         <Button block className="login-button google-button">
                                             <div>
-                                                <img src="public/static/img/GoogleIcon.png" />
+                                                <GoogleOutlined className="google-icon" />
                                                 <span>Enter with Google</span>
                                             </div>
                                         </Button>
                                     </a>
                                     <div className="sign-up-link">
-                                        Don&apos;t have an account?{" "}
+                                        Don&apos;t have an account?&nbsp;
                                         <Link to="/sign-up">
                                             <b>Sign up</b>
                                         </Link>

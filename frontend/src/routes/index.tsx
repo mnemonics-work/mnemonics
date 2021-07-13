@@ -10,6 +10,7 @@ import { CategoryPage } from "../components/CategoryPage";
 import { LoginPage } from "../components/LoginPage";
 import { SignUpPage } from "../components/SignUpPage";
 import { ComingSoonPage } from "../components/ComingSoonPage";
+import { ExpressionCreatePage } from "../components/ExpressionCreatePage";
 import history from "../history";
 
 export class MainRoutes extends Component<unknown, unknown> {
@@ -21,6 +22,7 @@ export class MainRoutes extends Component<unknown, unknown> {
                     <Route path="/login" component={LoginPage} />
                     <Route path="/sign-up" component={SignUpPage} />
                     <Route path="/mnemonic/:mnemonicId" component={MnemonicPage} exact={true} />
+                    <Route path="/expression-create" component={ExpressionCreatePage} />
                     <Route path="/expression/:expressionId" component={ExpressionPage} exact={true} />
                     <Route path="/category/:categoryId" component={CategoryPage} />
                     <Route path="/search/:query?" component={MnemonicSearch} />

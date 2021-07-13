@@ -18,15 +18,15 @@
         align-items: center;
         justify-content: center;
 
+        .google-icon {
+            font-size: 20px;
+        }
+
         div {
             display: flex;
             width: 150px;
             align-items: center;
             justify-content: space-between;
-        }
-
-        img {
-            height: 20px;
         }
     }
 

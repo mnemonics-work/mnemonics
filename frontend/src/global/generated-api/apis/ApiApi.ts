@@ -24,6 +24,9 @@ import {
     Expression,
     ExpressionFromJSON,
     ExpressionToJSON,
+    ExpressionCreate,
+    ExpressionCreateFromJSON,
+    ExpressionCreateToJSON,
     GoogleSocialAuth,
     GoogleSocialAuthFromJSON,
     GoogleSocialAuthToJSON,
@@ -73,7 +76,7 @@ export interface ApiCategoriesRelatedExpressionsRequest {
 }
 
 export interface ApiExpressionsCreateRequest {
-    data: Expression;
+    data: ExpressionCreate;
 }
 
 export interface ApiExpressionsDeleteRequest {
@@ -98,26 +101,8 @@ export interface ApiExpressionsUpdateRequest {
     data: Expression;
 }
 
-export interface ApiMnemonicTypesCreateRequest {
-    data: MnemonicType;
-}
-
-export interface ApiMnemonicTypesDeleteRequest {
-    id: number;
-}
-
-export interface ApiMnemonicTypesPartialUpdateRequest {
-    id: number;
-    data: MnemonicType;
-}
-
 export interface ApiMnemonicTypesReadRequest {
     id: number;
-}
-
-export interface ApiMnemonicTypesUpdateRequest {
-    id: number;
-    data: MnemonicType;
 }
 
 export interface ApiMnemonicsCreateRequest {
@@ -361,7 +346,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiExpressionsCreateRaw(requestParameters: ApiExpressionsCreateRequest): Promise<runtime.ApiResponse<Expression>> {
+    async apiExpressionsCreateRaw(requestParameters: ApiExpressionsCreateRequest): Promise<runtime.ApiResponse<ExpressionCreate>> {
         if (requestParameters.data === null || requestParameters.data === undefined) {
             throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiExpressionsCreate.');
         }
@@ -380,15 +365,15 @@ export class ApiApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ExpressionToJSON(requestParameters.data),
+            body: ExpressionCreateToJSON(requestParameters.data),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ExpressionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ExpressionCreateFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiExpressionsCreate(requestParameters: ApiExpressionsCreateRequest): Promise<Expression> {
+    async apiExpressionsCreate(requestParameters: ApiExpressionsCreateRequest): Promise<ExpressionCreate> {
         const response = await this.apiExpressionsCreateRaw(requestParameters);
         return await response.value();
     }
@@ -590,70 +575,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiMnemonicTypesCreateRaw(requestParameters: ApiMnemonicTypesCreateRequest): Promise<runtime.ApiResponse<MnemonicType>> {
-        if (requestParameters.data === null || requestParameters.data === undefined) {
-            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiMnemonicTypesCreate.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        const response = await this.request({
-            path: `/api/mnemonicTypes`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: MnemonicTypeToJSON(requestParameters.data),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => MnemonicTypeFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiMnemonicTypesCreate(requestParameters: ApiMnemonicTypesCreateRequest): Promise<MnemonicType> {
-        const response = await this.apiMnemonicTypesCreateRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiMnemonicTypesDeleteRaw(requestParameters: ApiMnemonicTypesDeleteRequest): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiMnemonicTypesDelete.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        const response = await this.request({
-            path: `/api/mnemonicTypes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiMnemonicTypesDelete(requestParameters: ApiMnemonicTypesDeleteRequest): Promise<void> {
-        await this.apiMnemonicTypesDeleteRaw(requestParameters);
-    }
-
-    /**
-     */
     async apiMnemonicTypesListRaw(): Promise<runtime.ApiResponse<Array<MnemonicType>>> {
         const queryParameters: any = {};
 
@@ -676,44 +597,6 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async apiMnemonicTypesList(): Promise<Array<MnemonicType>> {
         const response = await this.apiMnemonicTypesListRaw();
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiMnemonicTypesPartialUpdateRaw(requestParameters: ApiMnemonicTypesPartialUpdateRequest): Promise<runtime.ApiResponse<MnemonicType>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiMnemonicTypesPartialUpdate.');
-        }
-
-        if (requestParameters.data === null || requestParameters.data === undefined) {
-            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiMnemonicTypesPartialUpdate.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        const response = await this.request({
-            path: `/api/mnemonicTypes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-            body: MnemonicTypeToJSON(requestParameters.data),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => MnemonicTypeFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiMnemonicTypesPartialUpdate(requestParameters: ApiMnemonicTypesPartialUpdateRequest): Promise<MnemonicType> {
-        const response = await this.apiMnemonicTypesPartialUpdateRaw(requestParameters);
         return await response.value();
     }
 
@@ -745,44 +628,6 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async apiMnemonicTypesRead(requestParameters: ApiMnemonicTypesReadRequest): Promise<MnemonicType> {
         const response = await this.apiMnemonicTypesReadRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiMnemonicTypesUpdateRaw(requestParameters: ApiMnemonicTypesUpdateRequest): Promise<runtime.ApiResponse<MnemonicType>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiMnemonicTypesUpdate.');
-        }
-
-        if (requestParameters.data === null || requestParameters.data === undefined) {
-            throw new runtime.RequiredError('data','Required parameter requestParameters.data was null or undefined when calling apiMnemonicTypesUpdate.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
-            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
-        }
-        const response = await this.request({
-            path: `/api/mnemonicTypes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: MnemonicTypeToJSON(requestParameters.data),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => MnemonicTypeFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiMnemonicTypesUpdate(requestParameters: ApiMnemonicTypesUpdateRequest): Promise<MnemonicType> {
-        const response = await this.apiMnemonicTypesUpdateRaw(requestParameters);
         return await response.value();
     }
 

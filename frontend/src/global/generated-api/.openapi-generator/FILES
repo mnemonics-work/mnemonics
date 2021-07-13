@@ -7,9 +7,11 @@ models/AuthToken.ts
 models/Category.ts
 models/Event.ts
 models/Expression.ts
+models/ExpressionCreate.ts
 models/GoogleSocialAuth.ts
 models/InlineResponse200.ts
 models/Mnemonic.ts
+models/MnemonicCreate.ts
 models/MnemonicType.ts
 models/Register.ts
 models/Tag.ts
