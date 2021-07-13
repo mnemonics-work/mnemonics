@@ -1,20 +1,29 @@
 from rest_framework import filters
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
 from mnemonics.filters import MnemonicsFilter, CategoriesFilter
 from mnemonics.models import Category, Expression, Mnemonic, MnemonicType, Tag
 from mnemonics.serializers import (
     CategorySerializer,
     ExpressionSerializer,
+    ExpressionCreateSerializer,
     MnemonicSerializer,
     MnemonicTypeSerializer,
     TagSerializer,
 )
+
+
+class BaseViewSet(viewsets.GenericViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -67,7 +76,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return super(CategoryViewSet, self).list(request, args, kwargs)
 
 
-class ExpressionViewSet(viewsets.ModelViewSet):
+class ExpressionViewSet(BaseViewSet, viewsets.ModelViewSet):
     serializer_class = ExpressionSerializer
     queryset = Expression.objects.all()
 
@@ -80,6 +89,14 @@ class ExpressionViewSet(viewsets.ModelViewSet):
                 ancestors.append(parent)
             category_to_query = parent
         return ancestors
+
+    @swagger_auto_schema(request_body=ExpressionCreateSerializer)
+    def create(self, request, *args, **kwargs):
+        serializer = ExpressionCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        expression = serializer.save(author=self.request.user)
+        serializer = self.get_serializer(expression)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(responses={200: CategorySerializer(many=True)})
     @action(detail=True)
@@ -94,7 +111,7 @@ class ExpressionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class MnemonicsViewSet(viewsets.ModelViewSet):
+class MnemonicsViewSet(BaseViewSet, viewsets.ModelViewSet):
     serializer_class = MnemonicSerializer
     queryset = Mnemonic.objects.all()
     pagination_class = LimitOffsetPagination
@@ -131,7 +148,7 @@ class MnemonicsViewSet(viewsets.ModelViewSet):
         return super().list(request, args, kwargs)
 
 
-class MnemonicTypeViewSet(viewsets.ModelViewSet):
+class MnemonicTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MnemonicTypeSerializer
     queryset = MnemonicType.objects.all()
 

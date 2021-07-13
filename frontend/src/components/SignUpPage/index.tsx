@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Layout, Typography } from "antd";
-import { Form, Input, Button } from "antd";
+import { Button, Form, Input, Layout, Typography } from "antd";
+import { GoogleOutlined } from "@ant-design/icons";
 
 import "./styles.scss";
 import history from "../../history";
 import AuthService from "../../services/auth.service";
-import { GOOGLE_LINK } from "global/constants";
 import { CustomHeader } from "../Header";
 import { MnemonicsAppApi } from "global/api";
+import { GOOGLE_LINK } from "global/constants";
 import { ApiAuthRegisterRequest } from "global/generated-api";
 
 const { Title } = Typography;
@@ -21,13 +21,7 @@ export class SignUpPage extends Component<unknown> {
         password: "",
     };
 
-    constructor(props: unknown) {
-        super(props);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const {
             target: { value, name },
         } = event;
@@ -35,9 +29,9 @@ export class SignUpPage extends Component<unknown> {
         this.setState({
             [name]: value,
         });
-    }
+    };
 
-    handleSubmit(event: React.ChangeEvent): void {
+    handleSubmit = (): void => {
         const { fullname, email, username, password } = this.state;
         const requestData = {
             fullname,
@@ -57,8 +51,7 @@ export class SignUpPage extends Component<unknown> {
                 console.error(error);
             },
         );
-        event.preventDefault();
-    }
+    };
     render(): JSX.Element {
         return (
             <Layout>
@@ -124,8 +117,7 @@ export class SignUpPage extends Component<unknown> {
                                                 },
                                             ]}
                                         >
-                                            <Input
-                                                type="password"
+                                            <Input.Password
                                                 name="password"
                                                 value={this.state.password}
                                                 onChange={this.handleInputChange}
@@ -138,7 +130,7 @@ export class SignUpPage extends Component<unknown> {
                                     <a href={GOOGLE_LINK}>
                                         <Button block className="register-button google-button">
                                             <div>
-                                                <img src="public/static/img/GoogleIcon.png" />
+                                                <GoogleOutlined className="google-icon" />
                                                 <span>Register with Google</span>
                                             </div>
                                         </Button>
