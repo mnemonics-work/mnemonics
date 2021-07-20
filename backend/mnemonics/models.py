@@ -32,6 +32,14 @@ class Expression(models.Model):
     def __str__(self):
         return "{} - {}".format(self.pk, self.title)
 
+    def add_related_mnemonics(self, mnemonics):
+        for mnemonic_data in mnemonics:
+            tags = mnemonic_data.pop("tags")
+            types = mnemonic_data.pop("types")
+            mnemonic = Mnemonic.objects.create(expression=self, **mnemonic_data)
+            mnemonic.tags.set(tags)
+            mnemonic.types.set(types)
+
 
 class Mnemonic(models.Model):
     title = models.TextField(blank=False, null=False)

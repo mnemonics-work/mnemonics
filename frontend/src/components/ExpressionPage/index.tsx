@@ -1,8 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { Col, Layout, List, PageHeader, Pagination, Row, Spin, Typography } from "antd";
+import { Col, Layout, List, PageHeader, Pagination, Row, Spin, Typography, Button } from "antd";
+import { Link } from "react-router-dom";
 
-import { MnemonicsAppApi } from "global/api";
+import "./styles.scss";
+import history from "../../history";
+import { CustomHeader } from "../Header";
+import { MnemonicsCard } from "../MnemonicCard";
+import { Labels, LabelType } from "../Labels";
+import { AuthenticatedAppApi } from "global/api";
 import {
     ApiExpressionsReadRequest,
     ApiExpressionsRelatedCategoriesRequest,
@@ -10,12 +16,11 @@ import {
     Category,
     Expression,
     Mnemonic,
+    ApiExpressionsIsAuthorRequest,
+    IsAuthorExpression,
 } from "global/generated-api";
 
-import { MnemonicsCard } from "../MnemonicCard";
-import { Labels, LabelType } from "../Labels";
-import "./styles.scss";
-
+const MnemonicsAppApi = AuthenticatedAppApi();
 const { Title, Paragraph } = Typography;
 const { Content } = Layout;
 
@@ -41,6 +46,8 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
         categories: [],
         current: 1,
     };
+    expressionId = +this.props.match.params.expressionId;
+    isAuthor: boolean | undefined = false;
 
     async getExpressionDataFromApi(expressionId: number): Promise<Expression> {
         const requestParams: ApiExpressionsReadRequest = { id: expressionId };
@@ -65,7 +72,7 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
     }
 
     async getRelatedCategories(): Promise<Category[]> {
-        const requestParams: ApiExpressionsRelatedCategoriesRequest = { id: +this.props.match.params.expressionId };
+        const requestParams: ApiExpressionsRelatedCategoriesRequest = { id: this.expressionId };
         return await MnemonicsAppApi.apiExpressionsRelatedCategories(requestParams);
     }
 
@@ -77,13 +84,20 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
     };
 
     async componentDidMount(): Promise<void> {
-        // Get data from expressions
-        const expression = await this.getExpressionDataFromApi(+this.props.match.params.expressionId);
-        // From mnemonic ids get mnemonics
-        const mnemonics = await this.getRelatedMnemonics(1, Array.from(expression.mnemonics));
-        // From categories ids get categories
-        const categories = await this.getRelatedCategories();
-        this.setState({ expression, mnemonics, categories, loaded: true });
+        const request: ApiExpressionsIsAuthorRequest = { id: this.expressionId };
+        MnemonicsAppApi.apiExpressionsIsAuthor(request).then(
+            async (result: IsAuthorExpression) => {
+                this.isAuthor = result.isAuthor;
+                const expression = await this.getExpressionDataFromApi(this.expressionId);
+                const mnemonics = await this.getRelatedMnemonics(1, Array.from(expression.mnemonics));
+                const categories = await this.getRelatedCategories();
+                this.setState({ expression, mnemonics, categories, loaded: true });
+            },
+            (error: unknown) => {
+                console.error(error);
+                history.push("/home");
+            },
+        );
     }
 
     renderSkeleton(): JSX.Element[] {
@@ -99,63 +113,70 @@ export class ExpressionPage extends Component<RouteComponentProps<RouteParams>> 
 
     render(): JSX.Element {
         const { expression, loaded, categories, current, mnemonics } = this.state;
-        const expressionData: Expression | undefined = expression;
-        if (!loaded) {
-            // Load "Loading" spinner
-            return (
-                <Row>
-                    <Col span={6} offset={12}>
-                        <Spin size="large" />
-                    </Col>
-                </Row>
-            );
-        }
-        if (expressionData == undefined) {
-            // Load Not found page
-            // TODO: define a 404 page
-            return <div> Not found </div>;
-        }
 
         return (
             <Layout className="layout">
+                <CustomHeader />
                 <Content className="expression-content">
-                    <Row>
-                        <Col span={12} offset={6}>
-                            <Typography>
-                                <PageHeader
-                                    className="expression-header"
-                                    title={expressionData.title}
-                                    tags={<Labels labels={expressionData.tags} labelType={LabelType.mnemonicTag} />}
-                                />
-                                <div className="expression-content">
-                                    <Title level={3}>Description</Title>
-                                    <Paragraph>{expressionData.description}</Paragraph>
-                                    <Title level={3}> Categories </Title>
-                                    <Paragraph>
-                                        <List
-                                            size="small"
-                                            dataSource={categories}
-                                            renderItem={(item) => <List.Item>{item.title}</List.Item>}
-                                        />
-                                    </Paragraph>
-                                    <Title level={3}> Mnemonics </Title>
-                                    <Paragraph>
-                                        <div className="card-list">
-                                            {loaded ? this.renderMnemonicCards(mnemonics) : this.renderSkeleton()}
-                                        </div>
-                                        <Pagination
-                                            className="pagination"
-                                            defaultCurrent={1}
-                                            total={this.total_cards}
-                                            current={current}
-                                            pageSize={this.PAGE_SIZE}
-                                            onChange={this.onPageChange}
-                                        />
-                                    </Paragraph>
-                                </div>
-                            </Typography>
-                        </Col>
-                    </Row>
+                    {loaded && expression ? (
+                        <Row>
+                            <Col span={12} offset={6}>
+                                <Typography>
+                                    <PageHeader
+                                        className="expression-header"
+                                        title={expression.title}
+                                        tags={<Labels labels={expression.tags} labelType={LabelType.mnemonicTag} />}
+                                    />
+                                    <div className="expression-content">
+                                        <Title level={3}>Description</Title>
+                                        <Paragraph>{expression.description}</Paragraph>
+                                        <Title level={3}> Categories </Title>
+                                        <Paragraph>
+                                            <List
+                                                size="small"
+                                                dataSource={categories}
+                                                renderItem={(item) => <List.Item>{item.title}</List.Item>}
+                                            />
+                                        </Paragraph>
+                                        <Title level={3}> Mnemonics </Title>
+                                        <Paragraph>
+                                            <div className="card-list">
+                                                {loaded ? this.renderMnemonicCards(mnemonics) : this.renderSkeleton()}
+                                            </div>
+                                            <Pagination
+                                                className="pagination"
+                                                defaultCurrent={1}
+                                                total={this.total_cards}
+                                                current={current}
+                                                pageSize={this.PAGE_SIZE}
+                                                onChange={this.onPageChange}
+                                            />
+                                        </Paragraph>
+                                        {this.isAuthor && (
+                                            <Fragment>
+                                                <Link to={`/expression/${this.expressionId}/mnemonic/create`}>
+                                                    <Button type="dashed" className="new-mnemonics-button">
+                                                        + Add new mnemonics
+                                                    </Button>
+                                                </Link>
+                                                <Link to={`/expression/${this.expressionId}/edit`}>
+                                                    <Button type="primary" className="edit-expression-button">
+                                                        Edit Expression
+                                                    </Button>
+                                                </Link>
+                                            </Fragment>
+                                        )}
+                                    </div>
+                                </Typography>
+                            </Col>
+                        </Row>
+                    ) : (
+                        <Row className="spin">
+                            <Col span={6} offset={12}>
+                                <Spin size="large" />
+                            </Col>
+                        </Row>
+                    )}
                 </Content>
             </Layout>
         );

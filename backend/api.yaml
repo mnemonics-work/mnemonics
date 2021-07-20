@@ -180,7 +180,7 @@ paths:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/ExpressionCreate'
+            $ref: '#/definitions/Expression'
       tags:
         - api
     parameters: []
@@ -204,7 +204,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Expression'
+            $ref: '#/definitions/ExpressionUpdate'
       responses:
         '200':
           description: ''
@@ -243,13 +243,54 @@ paths:
         description: A unique integer value identifying this expression.
         required: true
         type: integer
+  /api/expressions/{id}/add_related_mnemonics:
+    post:
+      operationId: api_expressions_add_related_mnemonics
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RelatedMnemonicsExpression'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Expression'
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this expression.
+        required: true
+        type: integer
+  /api/expressions/{id}/is_author:
+    get:
+      operationId: api_expressions_is_author
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/IsAuthorExpression'
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this expression.
+        required: true
+        type: integer
   /api/expressions/{id}/related_categories:
     get:
       operationId: api_expressions_related_categories
       description: ''
       parameters: []
       responses:
-        '200':
+        '201':
           description: ''
           schema:
             type: array
@@ -359,22 +400,6 @@ paths:
                   $ref: '#/definitions/Mnemonic'
       tags:
         - api
-    post:
-      operationId: api_mnemonics_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Mnemonic'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Mnemonic'
-      tags:
-        - api
     parameters: []
   /api/mnemonics/{id}:
     get:
@@ -396,7 +421,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Mnemonic'
+            $ref: '#/definitions/MnemonicCreateUpdate'
       responses:
         '200':
           description: ''
@@ -427,6 +452,24 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this mnemonic.
+        required: true
+        type: integer
+  /api/mnemonics/{id}/is_author:
+    get:
+      operationId: api_mnemonics_is_author
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/IsAuthorMnemonic'
       tags:
         - api
     parameters:
@@ -631,7 +674,7 @@ definitions:
         items:
           type: integer
         uniqueItems: true
-  MnemonicCreate:
+  MnemonicCreateUpdate:
     required:
       - title
       - types
@@ -700,7 +743,7 @@ definitions:
       mnemonics:
         type: array
         items:
-          $ref: '#/definitions/MnemonicCreate'
+          $ref: '#/definitions/MnemonicCreateUpdate'
       categories:
         type: array
         items:
@@ -709,6 +752,49 @@ definitions:
         type: array
         items:
           type: integer
+  ExpressionUpdate:
+    required:
+      - title
+      - categories
+      - tags
+    type: object
+    properties:
+      title:
+        title: Title
+        type: string
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      categories:
+        type: array
+        items:
+          type: integer
+      tags:
+        type: array
+        items:
+          type: integer
+  RelatedMnemonicsExpression:
+    required:
+      - mnemonics
+    type: object
+    properties:
+      mnemonics:
+        type: array
+        items:
+          $ref: '#/definitions/MnemonicCreateUpdate'
+  IsAuthorExpression:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      is_author:
+        title: Is author
+        type: boolean
+        readOnly: true
   MnemonicType:
     required:
       - label
@@ -775,6 +861,17 @@ definitions:
         items:
           type: integer
         uniqueItems: true
+  IsAuthorMnemonic:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      is_author:
+        title: Is author
+        type: boolean
+        readOnly: true
   Tag:
     required:
       - label

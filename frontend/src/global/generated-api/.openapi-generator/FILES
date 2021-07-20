@@ -8,12 +8,16 @@ models/Category.ts
 models/Event.ts
 models/Expression.ts
 models/ExpressionCreate.ts
+models/ExpressionUpdate.ts
 models/GoogleSocialAuth.ts
 models/InlineResponse200.ts
+models/IsAuthorExpression.ts
+models/IsAuthorMnemonic.ts
 models/Mnemonic.ts
-models/MnemonicCreate.ts
+models/MnemonicCreateUpdate.ts
 models/MnemonicType.ts
 models/Register.ts
+models/RelatedMnemonicsExpression.ts
 models/Tag.ts
 models/Token.ts
 models/index.ts

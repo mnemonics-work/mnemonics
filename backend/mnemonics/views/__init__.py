@@ -11,13 +11,19 @@ from drf_yasg import openapi
 
 from mnemonics.filters import MnemonicsFilter, CategoriesFilter
 from mnemonics.models import Category, Expression, Mnemonic, MnemonicType, Tag
+from mnemonics.permissions import IsExpressionAuthor, IsMnemonicAuthor
 from mnemonics.serializers import (
     CategorySerializer,
     ExpressionSerializer,
     ExpressionCreateSerializer,
+    ExpressionUpdateSerializer,
     MnemonicSerializer,
+    MnemonicCreateUpdateSerializer,
+    IsAuthorMnemonicSerializer,
     MnemonicTypeSerializer,
     TagSerializer,
+    RelatedMnemonicsExpressionSerializer,
+    IsAuthorExpressionSerializer,
 )
 
 
@@ -79,6 +85,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class ExpressionViewSet(BaseViewSet, viewsets.ModelViewSet):
     serializer_class = ExpressionSerializer
     queryset = Expression.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly, IsExpressionAuthor]
 
     def get_ancestors_of_category(self, category):
         category_to_query = category
@@ -90,7 +97,9 @@ class ExpressionViewSet(BaseViewSet, viewsets.ModelViewSet):
             category_to_query = parent
         return ancestors
 
-    @swagger_auto_schema(request_body=ExpressionCreateSerializer)
+    @swagger_auto_schema(
+        request_body=ExpressionCreateSerializer, responses={201: ExpressionSerializer()}
+    )
     def create(self, request, *args, **kwargs):
         serializer = ExpressionCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -98,7 +107,33 @@ class ExpressionViewSet(BaseViewSet, viewsets.ModelViewSet):
         serializer = self.get_serializer(expression)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @swagger_auto_schema(responses={200: CategorySerializer(many=True)})
+    @swagger_auto_schema(
+        request_body=ExpressionUpdateSerializer, responses={200: ExpressionSerializer()}
+    )
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ExpressionUpdateSerializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        expression = serializer.save()
+        serializer = self.get_serializer(expression)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=RelatedMnemonicsExpressionSerializer,
+        responses={201: ExpressionSerializer()},
+    )
+    @action(methods=["POST"], detail=True)
+    def add_related_mnemonics(self, request, *args, **kwargs):
+        expression = self.get_object()
+        serializer = RelatedMnemonicsExpressionSerializer(
+            data=request.data, context={"expression": expression}
+        )
+        serializer.is_valid(raise_exception=True)
+        expression = serializer.save()
+        serializer = self.get_serializer(expression)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(responses={201: CategorySerializer(many=True)})
     @action(detail=True)
     def related_categories(self, request, pk=None):
         expression_obj = self.get_object()
@@ -108,13 +143,28 @@ class ExpressionViewSet(BaseViewSet, viewsets.ModelViewSet):
             related_categories += self.get_ancestors_of_category(category)
         distinct_related_categories = list(set(related_categories))
         serializer = CategorySerializer(distinct_related_categories, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, serializer_class=IsAuthorExpressionSerializer)
+    def is_author(self, request, *args, **kwargs):
+        expression = self.get_object()
+        serializer = IsAuthorExpressionSerializer(
+            expression, context={"user": request.user}
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class MnemonicsViewSet(BaseViewSet, viewsets.ModelViewSet):
+class MnemonicsViewSet(
+    BaseViewSet,
+    viewsets.mixins.ListModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+):
     serializer_class = MnemonicSerializer
     queryset = Mnemonic.objects.all()
     pagination_class = LimitOffsetPagination
+    permission_classes = [IsAuthenticatedOrReadOnly, IsMnemonicAuthor]
     search_fields = ["title", "description"]
     filter_class = MnemonicsFilter
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
@@ -146,6 +196,26 @@ class MnemonicsViewSet(BaseViewSet, viewsets.ModelViewSet):
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, args, kwargs)
+
+    @swagger_auto_schema(
+        request_body=MnemonicCreateUpdateSerializer,
+        responses={200: MnemonicSerializer()},
+    )
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = MnemonicCreateUpdateSerializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        mnemonic = serializer.save()
+        serializer = self.get_serializer(mnemonic)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, serializer_class=IsAuthorMnemonicSerializer)
+    def is_author(self, request, *args, **kwargs):
+        mnemonic = self.get_object()
+        serializer = IsAuthorMnemonicSerializer(
+            mnemonic, context={"user": request.user}
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class MnemonicTypeViewSet(viewsets.ReadOnlyModelViewSet):

@@ -16,64 +16,64 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface MnemonicCreate
+ * @interface MnemonicCreateUpdate
  */
-export interface MnemonicCreate {
+export interface MnemonicCreateUpdate {
     /**
      * 
      * @type {number}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     readonly id?: number;
     /**
      * 
      * @type {string}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     title: string;
     /**
      * 
      * @type {string}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     description?: string | null;
     /**
      * 
      * @type {number}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     expression?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     sourceUrl?: string | null;
     /**
      * 
      * @type {Array<string>}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     links?: Array<string> | null;
     /**
      * 
      * @type {Array<number>}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     types: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof MnemonicCreate
+     * @memberof MnemonicCreateUpdate
      */
     tags: Array<number>;
 }
 
-export function MnemonicCreateFromJSON(json: any): MnemonicCreate {
-    return MnemonicCreateFromJSONTyped(json, false);
+export function MnemonicCreateUpdateFromJSON(json: any): MnemonicCreateUpdate {
+    return MnemonicCreateUpdateFromJSONTyped(json, false);
 }
 
-export function MnemonicCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): MnemonicCreate {
+export function MnemonicCreateUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): MnemonicCreateUpdate {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -90,7 +90,7 @@ export function MnemonicCreateFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-export function MnemonicCreateToJSON(value?: MnemonicCreate | null): any {
+export function MnemonicCreateUpdateToJSON(value?: MnemonicCreateUpdate | null): any {
     if (value === undefined) {
         return undefined;
     }
