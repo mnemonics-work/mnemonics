@@ -13,77 +13,56 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import {
-    MnemonicCreateUpdate,
-    MnemonicCreateUpdateFromJSON,
-    MnemonicCreateUpdateFromJSONTyped,
-    MnemonicCreateUpdateToJSON,
-} from './';
-
 /**
  * 
  * @export
- * @interface ExpressionCreate
+ * @interface ExpressionUpdate
  */
-export interface ExpressionCreate {
-    /**
-     * 
-     * @type {number}
-     * @memberof ExpressionCreate
-     */
-    readonly id?: number;
+export interface ExpressionUpdate {
     /**
      * 
      * @type {string}
-     * @memberof ExpressionCreate
+     * @memberof ExpressionUpdate
      */
     title: string;
     /**
      * 
      * @type {string}
-     * @memberof ExpressionCreate
+     * @memberof ExpressionUpdate
      */
     description?: string | null;
     /**
      * 
-     * @type {Array<MnemonicCreateUpdate>}
-     * @memberof ExpressionCreate
-     */
-    mnemonics: Array<MnemonicCreateUpdate>;
-    /**
-     * 
      * @type {Array<number>}
-     * @memberof ExpressionCreate
+     * @memberof ExpressionUpdate
      */
     categories: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof ExpressionCreate
+     * @memberof ExpressionUpdate
      */
     tags: Array<number>;
 }
 
-export function ExpressionCreateFromJSON(json: any): ExpressionCreate {
-    return ExpressionCreateFromJSONTyped(json, false);
+export function ExpressionUpdateFromJSON(json: any): ExpressionUpdate {
+    return ExpressionUpdateFromJSONTyped(json, false);
 }
 
-export function ExpressionCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ExpressionCreate {
+export function ExpressionUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ExpressionUpdate {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
-        'mnemonics': ((json['mnemonics'] as Array<any>).map(MnemonicCreateUpdateFromJSON)),
         'categories': json['categories'],
         'tags': json['tags'],
     };
 }
 
-export function ExpressionCreateToJSON(value?: ExpressionCreate | null): any {
+export function ExpressionUpdateToJSON(value?: ExpressionUpdate | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -94,7 +73,6 @@ export function ExpressionCreateToJSON(value?: ExpressionCreate | null): any {
         
         'title': value.title,
         'description': value.description,
-        'mnemonics': ((value.mnemonics as Array<any>).map(MnemonicCreateUpdateToJSON)),
         'categories': value.categories,
         'tags': value.tags,
     };

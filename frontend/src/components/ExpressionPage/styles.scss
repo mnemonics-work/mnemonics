@@ -1,4 +1,4 @@
-$background-color:    white;
+$background-color: white;
 
 .expression-header {
     background-color: $background-color;
@@ -6,4 +6,14 @@ $background-color:    white;
 
 .expression-content {
     background-color: $background-color;
+}
+
+.new-mnemonics-button {
+    width: 180px;
+    margin: 20px calc(50% - 90px);
+}
+
+.edit-expression-button {
+    width: 180px;
+    margin: 0px calc(50% - 90px) 40px;
 }

@@ -1,20 +1,23 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Select, Tag, Col, Layout, Row, Typography, Spin } from "antd";
+import { RouteComponentProps } from "react-router-dom";
+import { Form, Input, Button, Select, Tag, Col, Layout, Row, Typography, Spin, Popconfirm } from "antd";
+import { DeleteTwoTone } from "@ant-design/icons";
 
 import "./styles.scss";
 import history from "../../history";
-import AuthService from "../../services/auth.service";
 import { CustomHeader } from "../Header";
-import { MnemonicsCreateForm, MnemonicInterface, TagModelMapping } from "../MnemonicsCreateForm";
 import { AuthenticatedAppApi } from "global/api";
 import {
     ApiCategoriesListRequest,
-    ApiExpressionsCreateRequest,
+    ApiExpressionsUpdateRequest,
     Category,
+    Expression,
     MnemonicType,
     Tag as TagModel,
-    MnemonicCreateUpdate,
-    Expression,
+    ApiExpressionsReadRequest,
+    ApiExpressionsIsAuthorRequest,
+    IsAuthorExpression,
+    ApiExpressionsDeleteRequest,
 } from "global/generated-api";
 
 const MnemonicsAppApi = AuthenticatedAppApi();
@@ -23,6 +26,10 @@ const { Content } = Layout;
 const { TextArea } = Input;
 const { Option } = Select;
 const { CheckableTag } = Tag;
+
+interface RouteParams {
+    expressionId: string;
+}
 
 interface ExpressionCreateStateInterface {
     title: string;
@@ -40,7 +47,12 @@ interface CategoryModelMapping {
     title: string;
 }
 
-export class ExpressionCreatePage extends Component<unknown> {
+interface TagModelMapping {
+    id?: number;
+    label: string;
+}
+
+export class ExpressionEditPage extends Component<RouteComponentProps<RouteParams>> {
     state: ExpressionCreateStateInterface = {
         title: "",
         description: "",
@@ -51,33 +63,57 @@ export class ExpressionCreatePage extends Component<unknown> {
         selectedTags: [],
         isLoaded: false,
     };
-    mnemonics: MnemonicInterface[] = [
-        {
-            title: "",
-            description: "",
-            selectedTags: [],
-            selectedTypes: [],
-            sourceUrl: "",
-            links: "",
-            key: 0,
-        },
-    ];
+    expressionId = +this.props.match.params.expressionId;
+    isAuthor = false;
+    title = "";
 
     async componentDidMount(): Promise<void> {
-        if (this.isLogged()) {
-            const tags = await MnemonicsAppApi.apiTagsList();
-            const types = await MnemonicsAppApi.apiMnemonicTypesList();
-            const categoriesRequest: ApiCategoriesListRequest = {};
-            const categories = await MnemonicsAppApi.apiCategoriesList(categoriesRequest);
-            this.setState({ tags, types, categories, isLoaded: true });
-        } else {
-            history.push("/home");
-        }
+        const request: ApiExpressionsIsAuthorRequest = { id: this.expressionId };
+        MnemonicsAppApi.apiExpressionsIsAuthor(request).then(
+            async (result: IsAuthorExpression) => {
+                this.isAuthor = result && result.isAuthor !== undefined ? result.isAuthor : false;
+                const tagsList = await MnemonicsAppApi.apiTagsList();
+                const mnemonicsTypesList = await MnemonicsAppApi.apiMnemonicTypesList();
+                const categoriesRequest: ApiCategoriesListRequest = {};
+                const categoriesList = await MnemonicsAppApi.apiCategoriesList(categoriesRequest);
+                const expressionRequest: ApiExpressionsReadRequest = { id: this.expressionId };
+                MnemonicsAppApi.apiExpressionsRead(expressionRequest).then(
+                    (result: Expression) => {
+                        this.setExpressionData(result, categoriesList, tagsList, mnemonicsTypesList);
+                    },
+                    (error: unknown) => {
+                        console.error(error);
+                        history.push("/home");
+                    },
+                );
+            },
+            (error: unknown) => {
+                console.error(error);
+                history.push("/home");
+            },
+        );
     }
 
-    isLogged = (): boolean => {
-        return Boolean(AuthService.getAuthToken());
-    };
+    async setExpressionData(
+        data: Expression,
+        categoriesList: Category[],
+        tagsList: TagModel[],
+        mnemonicsTypesList: MnemonicType[],
+    ): Promise<void> {
+        const { title, description, categories, tags, mnemonics } = data;
+        this.title = title;
+        this.setState({
+            title,
+            description,
+            mnemonics,
+            categories: categoriesList,
+            tags: tagsList,
+            types: mnemonicsTypesList,
+            selectedCategories: categories,
+            selectedTags: tags,
+            isLoaded: true,
+        });
+    }
 
     getListIds(list: (Category | MnemonicType | undefined)[]): number[] {
         const ids = [];
@@ -111,56 +147,75 @@ export class ExpressionCreatePage extends Component<unknown> {
         this.setState({ [name]: value });
     };
 
+    deleteExpression = (): void => {
+        const request: ApiExpressionsDeleteRequest = { id: this.expressionId };
+        MnemonicsAppApi.apiExpressionsDelete(request).then(
+            () => {
+                history.push("/home");
+            },
+            (error: unknown) => {
+                console.error(error);
+                alert("This expression could not been deleted.");
+            },
+        );
+    };
+
     handleSubmit = (): void => {
         const { title, description, selectedCategories, selectedTags } = this.state;
-        const mnemonics: MnemonicCreateUpdate[] = [];
-        for (const mnemonic of this.mnemonics) {
-            const mnemonicData: MnemonicCreateUpdate = {
-                types: mnemonic.selectedTypes,
-                title: mnemonic.title,
-                description: mnemonic.description,
-                sourceUrl: mnemonic.sourceUrl,
-                links: mnemonic.links
-                    .split(",")
-                    .map((link) => link.trim())
-                    .filter((link) => Boolean(link)),
-                tags: mnemonic.selectedTags,
-            };
-            mnemonics.push(mnemonicData);
-        }
         const requestData = {
             title,
             description,
             categories: selectedCategories,
             tags: selectedTags,
-            mnemonics,
         };
-        const request: ApiExpressionsCreateRequest = { data: requestData };
-        MnemonicsAppApi.apiExpressionsCreate(request).then(
+        const request: ApiExpressionsUpdateRequest = { data: requestData, id: this.expressionId };
+        MnemonicsAppApi.apiExpressionsUpdate(request).then(
             (result: Expression) => {
                 history.push("/expression/" + result.id);
             },
             (error: unknown) => {
                 console.error(error);
-                alert("Expression was not created, check form data.");
+                alert("Expression was not updated, check form data.");
             },
         );
     };
 
     render(): JSX.Element {
-        const { selectedTags, categories, title, description, tags, types, isLoaded } = this.state;
+        const { selectedTags, categories, title, description, tags, isLoaded, selectedCategories } = this.state;
 
         return (
             <Layout className="layout">
                 <CustomHeader />
                 <Content className="expression-content">
                     {isLoaded ? (
-                        <Form onFinish={this.handleSubmit}>
+                        <Form
+                            onFinish={this.handleSubmit}
+                            initialValues={{
+                                title,
+                                description,
+                                categories: categories
+                                    .filter((category) => selectedCategories.indexOf(category.id as number) > -1)
+                                    .map((category) => category.title),
+                            }}
+                        >
                             <Row>
                                 <Col span={12} offset={6}>
                                     <Typography>
                                         <div className="expression-create-content">
-                                            <Title level={3}>New Expression</Title>
+                                            <Title level={3}>
+                                                {this.title}
+                                                <Popconfirm
+                                                    title="Are you sure to delete this expression?"
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onConfirm={this.deleteExpression}
+                                                >
+                                                    <DeleteTwoTone
+                                                        className="mnemonic-delete-button"
+                                                        twoToneColor="#eb2f96"
+                                                    />
+                                                </Popconfirm>
+                                            </Title>
                                             <div className="site-background center-content expression-inputs">
                                                 <Form.Item name="title">
                                                     <Input
@@ -182,7 +237,7 @@ export class ExpressionCreatePage extends Component<unknown> {
                                                         required
                                                     />
                                                 </Form.Item>
-                                                <Form.Item>
+                                                <Form.Item name="categories">
                                                     <Select
                                                         mode="multiple"
                                                         allowClear
@@ -214,14 +269,8 @@ export class ExpressionCreatePage extends Component<unknown> {
                                     </Typography>
                                 </Col>
                             </Row>
-                            <MnemonicsCreateForm
-                                onChange={(mnemonics: MnemonicInterface[]) => (this.mnemonics = mnemonics)}
-                                mnemonics={this.mnemonics}
-                                tags={tags}
-                                types={types}
-                            />
                             <Button type="primary" className="create-expression-button" htmlType="submit">
-                                Create Expression
+                                Save Expression
                             </Button>
                         </Form>
                     ) : (

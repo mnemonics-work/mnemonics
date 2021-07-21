@@ -28,7 +28,7 @@ export class CustomHeader extends Component<unknown> {
                 </Link>
                 {this.isLogged() ? (
                     <Row>
-                        <Link to="/expression-create">
+                        <Link to="/expression/create">
                             <Text className="header-text pointer">Create Mnemonics</Text>
                         </Link>
                         <div onClick={this.clearAuthToken}>

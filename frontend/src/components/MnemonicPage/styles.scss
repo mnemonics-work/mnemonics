@@ -1,4 +1,4 @@
-$background-color:    white;
+$background-color: white;
 
 .mnemonic-header {
     background-color: $background-color;
@@ -6,4 +6,12 @@ $background-color:    white;
 
 .mnemonic-content {
     background-color: $background-color;
+}
+
+.spin {
+    margin-top: 24px;
+}
+
+.edit-mnemonic-button {
+    margin: 20px calc(50% - 62.25px) 40px;
 }

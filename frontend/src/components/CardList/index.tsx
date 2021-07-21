@@ -72,6 +72,7 @@ export class CardList extends Component<unknown, MnemonicCardsState> {
                     current={this.state.current}
                     pageSize={this.PAGE_SIZE}
                     onChange={this.onPageChange}
+                    showSizeChanger={false}
                 />
             </Space>
         );
