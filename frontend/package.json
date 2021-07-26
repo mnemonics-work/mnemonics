@@ -14,10 +14,12 @@
     "antd": "^4.12.3",
     "emailjs-com": "^3.2.0",
     "file-loader": "^6.2.0",
+    "glob-parent": "^5.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "trim-newlines": "^3.0.1"
   },
   "scripts": {
     "dev": "webpack serve --mode=development",
