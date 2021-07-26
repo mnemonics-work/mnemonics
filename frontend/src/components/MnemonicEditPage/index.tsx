@@ -164,7 +164,7 @@ export class MnemonicEditPage extends Component<RouteComponentProps<RouteParams>
         return (
             <Layout className="layout">
                 <CustomHeader />
-                <Content className="expression-content">
+                <Content className="mnemonic-content">
                     <Row>
                         <Col span={12} offset={6}>
                             <Typography>
@@ -185,7 +185,7 @@ export class MnemonicEditPage extends Component<RouteComponentProps<RouteParams>
                                             <Title level={3}>
                                                 {this.title}
                                                 <Popconfirm
-                                                    title="Are you sure to delete this expression?"
+                                                    title="Are you sure to delete this mnemonic?"
                                                     okText="Yes"
                                                     cancelText="No"
                                                     onConfirm={this.deleteMnemonic}
