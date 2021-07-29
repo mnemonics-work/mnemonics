@@ -3,6 +3,8 @@
 
 It is an open initiative, aiming to welcome contributions.
 
+Additional background information, motivation behind the project is available in the [Wiki section](https://github.com/mnemonics-work/mnemonics/wiki) of the project.
+
 ## Quick development setup
 ### Frontend:
 - Tested and working with `Python 3.6.13`
