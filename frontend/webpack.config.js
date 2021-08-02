@@ -2,7 +2,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 require("dotenv").config({
-    path: path.join(__dirname, ".env"),
+    path: path.join(__dirname, "environments/.env.local"),
 });
 
 const config = {
