@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - staging
 jobs:
   check-backend:
     runs-on: ubuntu-latest

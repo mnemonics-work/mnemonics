@@ -1,4 +1,4 @@
-name: Mnemonics Deployment
+name: Mnemonics Production Deployment
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_STAGING }}
+        heroku_app_name: ${{ secrets.HEROKU_APP }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
         appdir: "backend"
   deploy-frontend:
@@ -31,7 +31,7 @@ jobs:
     - run: |
         cd frontend
         yarn install
-        yarn run build
+        yarn run build:prod
     - name: Deploy static site to S3 bucket
-      run: aws s3 sync ./frontend/build s3://${{ secrets.AWS_S3_BUCKET_STAGING }} --delete
+      run: aws s3 sync ./frontend/build s3://${{ secrets.AWS_S3_BUCKET }} --delete
 

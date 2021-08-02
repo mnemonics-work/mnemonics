@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.1.10",
     "antd": "^4.12.3",
     "emailjs-com": "^3.2.0",
+    "env-cmd": "^10.1.0",
     "file-loader": "^6.2.0",
     "glob-parent": "^5.1.2",
     "react": "^17.0.1",
@@ -22,8 +23,10 @@
     "trim-newlines": "^3.0.1"
   },
   "scripts": {
-    "dev": "webpack serve --mode=development",
-    "build": "webpack --mode=production",
+    "dev": "env-cmd -f environments/.env.local webpack serve --mode=development",
+    "build": "env-cmd -f environments/.env.local webpack",
+    "build:staging": "env-cmd -f environments/.env.staging webpack --mode=production",
+    "build:prod": "env-cmd -f environments/.env.prod webpack --mode=production",
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
     "generate-api": "rimraf src/global/generated-api && openapi-generator-cli generate"
   },
